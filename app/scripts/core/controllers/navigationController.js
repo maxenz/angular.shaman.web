@@ -3,10 +3,16 @@ angular
   .controller('NavigationController', ['$scope', '$location', '$timeout', function($scope, $location, $timeout) {
     'use strict';
     $scope.menu = [{
-      label: 'Overview',
+      label: 'Opciones del sistema',
       iconClasses: '',
       separator: true
-    }, {
+    },
+    {
+      label: 'Panel Operativo',
+      iconClasses: 'fa fa-th-large',
+      url: '#/operative-panel'
+    },
+     {
       label: 'Dashboard',
       iconClasses: 'glyphicon glyphicon-home',
       url: '#/'

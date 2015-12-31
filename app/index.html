@@ -2,19 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Maverick</title>
+  <title>Shaman SGE</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Maverick">
-	<meta name="author" content="nDevr Studios & The Red Team">
+	<meta name="description" content="Shaman SGE">
+	<meta name="author" content="Paramedic">
 
 	<link rel="icon" type="image/png" href="favicon.png">
 
 	<!-- prochtml:remove:dist -->
-	<link href="assets/less/styles.less" rel="stylesheet/less" media="all"> 
+	<link href="assets/less/styles.less" rel="stylesheet/less" media="all">
 	<!-- /prochtml -->
 
-	<link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700' rel='stylesheet' type='text/css'>     
+	<link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700' rel='stylesheet' type='text/css'>
 
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries. Placeholdr.js enables the placeholder attribute -->
 	<!--[if lte IE 9]>
@@ -53,9 +53,9 @@
 	<link rel="stylesheet" href="bower_components/skylo/vendor/styles/skylo.css" />
 	<link rel="stylesheet" href="bower_components/bootstrap-datepaginator/dist/bootstrap-datepaginator.min.css" />
 	<!-- endbower -->
-	<link rel='stylesheet' type='text/css' href='assets/fonts/glyphicons/css/glyphicons.min.css' /> 
-	<link rel='stylesheet' type='text/css' href='assets/plugins/form-fseditor/fseditor.css' /> 
-	<link rel='stylesheet' type='text/css' href='assets/plugins/jcrop/css/jquery.Jcrop.min.css' /> 
+	<link rel='stylesheet' type='text/css' href='assets/fonts/glyphicons/css/glyphicons.min.css' />
+	<link rel='stylesheet' type='text/css' href='assets/plugins/form-fseditor/fseditor.css' />
+	<link rel='stylesheet' type='text/css' href='assets/plugins/jcrop/css/jquery.Jcrop.min.css' />
 	<!-- endbuild -->
 
 	<!-- build:css({.tmp,app}) assets/css/main.css -->
@@ -125,7 +125,7 @@
 						<form
 						ng-click="$event.stopPropagation()"
 						ng-submit="goToSearch()">
-							<input type="text" ng-model="searchQuery" class="search-query" placeholder="Type to filter..." />
+							<input type="text" ng-model="searchQuery" class="search-query" placeholder="Escriba para filtrar..." />
 							<button type="submit" ng-click="goToSearch()"><i class="fa fa-binoculars"></i></button>
 						</form>
 		              </li>
@@ -134,7 +134,7 @@
 										active: item.selected,
 										  open: (item.children!==undefined) && item.open,
 							   'nav-separator': item.separator==true,
-		            			'search-focus': (searchQuery.length>0 && item.selected) }" 
+		            			'search-focus': (searchQuery.length>0 && item.selected) }"
 		            		ng-show="!(searchQuery.length && !item.selected)"
 						  ng-include="'templates/nav_renderer.html'"
 						></li>
@@ -165,7 +165,7 @@
 	<script src="bower_components/json3/lib/json3.min.js"></script>
 	<![endif]-->
 
-	<script type='text/javascript' src='http://maps.google.com/maps/api/js?sensor=true'></script> 
+	<script type='text/javascript' src='http://maps.google.com/maps/api/js?sensor=true'></script>
 
 	<!-- build:js scripts/vendor.js -->
 	<!-- bower:js -->
@@ -253,11 +253,11 @@
 	<script src="bower_components/velocity/velocity.ui.js"></script>
 	<!-- endbower -->
 
-	<script type='text/javascript' src='assets/plugins/form-colorpicker/js/bootstrap-colorpicker.min.js'></script> 
-	<script type='text/javascript' src='assets/plugins/form-fseditor/jquery.fseditor-min.js'></script> 
-	<script type='text/javascript' src='assets/plugins/form-jasnyupload/fileinput.min.js'></script> 
-	<script type='text/javascript' src='assets/plugins/flot/jquery.flot.spline.js'></script> 
-	
+	<script type='text/javascript' src='assets/plugins/form-colorpicker/js/bootstrap-colorpicker.min.js'></script>
+	<script type='text/javascript' src='assets/plugins/form-fseditor/jquery.fseditor-min.js'></script>
+	<script type='text/javascript' src='assets/plugins/form-jasnyupload/fileinput.min.js'></script>
+	<script type='text/javascript' src='assets/plugins/flot/jquery.flot.spline.js'></script>
+
 	<!-- endbuild -->
 
 	  <!-- build:js({.tmp,app}) scripts/scripts.js -->

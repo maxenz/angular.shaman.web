@@ -18,7 +18,7 @@ body {
 
 #wrapper 				{display:table;width: 100%; table-layout: fixed; overflow: auto; height: 100%; position: relative;}
 #layout-static 			{display: table-row; height: 100%;}
-.static-sidebar-wrapper {display: table-cell; overflow: hidden;} 
+.static-sidebar-wrapper {display: table-cell; overflow: hidden;}
 .static-sidebar-wrapper, .static-sidebar {width: 240px;}
 .static-content-wrapper {display: table-cell; position: relative; background: @body-bg}
 .static-sidebar-wrapper, .static-content-wrapper {vertical-align: top;}
@@ -26,7 +26,7 @@ footer					{background: @body-bg;}
 
 
 /* Fix the Grid */
-#wrap > .container-fluid, 
+#wrap > .container-fluid,
 #wrap > .container {
 	padding: 20px;
 }
@@ -34,8 +34,8 @@ footer					{background: @body-bg;}
 
 /* Logo */
 @navbar-brand-width: 190px;
-.navbar-brand {.text-hide() !important; background: url("../img/logo.png") no-repeat left top; height: @navbar-height; width: @navbar-brand-width;}
-.navbar-default .navbar-brand {.text-hide() !important; background: url("../img/logo.png") no-repeat left bottom; height: @navbar-height;width: @navbar-brand-width;}
+.navbar-brand { height: @navbar-height; width: @navbar-brand-width; color: white; line-height: 27px !important; text-align: center}
+.navbar-default .navbar-brand { height: @navbar-height;width: @navbar-brand-width;}
 
 // In small screens header becomes two lines
 @media (max-width: 520px) {
@@ -69,7 +69,7 @@ footer {
 	background: @body-bg;
 	color: @gray;
 
-	padding: 5px 20px; 
+	padding: 5px 20px;
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -100,7 +100,7 @@ footer {
 /* Page heading */
 
 #page-heading {
-	background: @page-title-color; 
+	background: @page-title-color;
 	&:extend(.clearfix all);
 
 
@@ -224,7 +224,7 @@ footer {
 				border-style: solid;
 				border-width: 0 9px 9px 9px;
 				border-color: transparent transparent @body-bg transparent;
-				
+
 				content: "";
 				position: absolute;
 				bottom: 0px; left: 50%; margin-left: -9px;
@@ -286,7 +286,7 @@ nav.navbar {
 			background: transparent;
 			border:none;
 		}
-	} 
+	}
 }
 
 @media (min-width: @screen-sm) {
@@ -388,7 +388,7 @@ nav.navbar {
 // 	opacity: 0;
 // }
 
-// .mainview-animation.ng-enter.ng-enter-active { 
+// .mainview-animation.ng-enter.ng-enter-active {
 // 	opacity: 1;
 // }
 
