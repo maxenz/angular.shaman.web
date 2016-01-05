@@ -1,0 +1,42 @@
+<div id="page-heading">
+  <h1>Panel Operativo</h1>
+</div>
+
+<div class="container-fluid">
+
+  <div class="row">
+    <tabset panel-tabs="true" panel-class="panel-success">
+      <tab heading="Despacho" ng-controller="dispatchController as dispatch">
+        <div class="row">
+          <div class="col-xs-8">
+            <panel panel-class="panel-warning" heading="Incidentes">
+              <panel-controls>
+                <label class="checkbox-inline" style="font-size:13px">
+                  <input icheck type="checkbox" id="seeMap" value="{{dispatch.data.seeMap}}" ng-model="dispatch.data.seeMap"> Mapa
+                </label>
+              </panel-controls>
+            </panel>
+          </div>
+          <div ng-class="{
+            'col-xs-2' : dispatch.data.seeMap,
+            'col-xs-4' : !dispatch.data.seeMap
+          }">
+          <panel panel-class="panel-warning" heading="Móviles">
+            <div style="height:400px" ng-grid="dispatch.data.gridOptionsMobiles"></div>
+          </panel>
+        </div>
+
+        <div class="col-xs-2" ng-show="dispatch.data.seeMap">
+          <panel panel-class="panel-warning">
+            <p>Mapa</p>
+          </panel>
+        </div>
+
+      </div>
+    </tab>
+    <tab heading="Recepción">
+      <p></p>
+    </tab>
+  </tabset>
+</div>
+</div>

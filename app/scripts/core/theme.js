@@ -19,5 +19,7 @@ angular
     'theme.core.navigation_controller',
     'theme.core.notifications_controller',
     'theme.core.messages_controller',
-    'theme.core.login_controller'
+    'theme.core.login_controller',
+    'theme.core.operative_controller',
+    'theme.core.dispatch_controller'
   ]);
