@@ -11,6 +11,7 @@ angular
     'sun.scrollable',
     'ui.bootstrap',
     'ui.select',
+    'uiGmapgoogle-maps',
     'theme.core.templates',
     'theme.core.template_overrides',
     'theme.core.panels',
@@ -21,5 +22,5 @@ angular
     'theme.core.messages_controller',
     'theme.core.login_controller',
     'theme.core.operative_controller',
-    'theme.core.dispatch_controller'
+    'theme.core.dispatch_controller',
   ]);

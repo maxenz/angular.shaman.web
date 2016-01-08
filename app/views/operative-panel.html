@@ -15,6 +15,10 @@
                   <input icheck type="checkbox" id="seeMap" value="{{dispatch.data.seeMap}}" ng-model="dispatch.data.seeMap"> Mapa
                 </label>
               </panel-controls>
+              <div style="height:400px" ng-grid="dispatch.data.gridOptionsIncidents"></div>
+              <div class="panel-loading" ng-show="dispatch.data.incidentsAreLoading">
+                <div class="panel-loader-circular"></div>
+              </div>
             </panel>
           </div>
           <div ng-class="{
@@ -23,12 +27,15 @@
           }">
           <panel panel-class="panel-warning" heading="Móviles">
             <div style="height:400px" ng-grid="dispatch.data.gridOptionsMobiles"></div>
+            <div class="panel-loading" ng-show="dispatch.data.mobilesAreLoading">
+              <div class="panel-loader-circular"></div>
+            </div>
           </panel>
         </div>
 
         <div class="col-xs-2" ng-show="dispatch.data.seeMap">
-          <panel panel-class="panel-warning">
-            <p>Mapa</p>
+          <panel panel-class="panel-warning" heading="Mapa">
+            <ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>
           </panel>
         </div>
 
