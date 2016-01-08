@@ -1,58 +1,28 @@
 (function() {
 
   angular
-  .module('theme.core.dispatch_controller', [])
+  .module('theme.core.dispatch_controller', ['ngGrid'])
   .controller('dispatchController', dispatchController);
 
   dispatchController.$inject = ['$scope', '$filter', '$theme', 'MobileService', 'IncidentService'];
   function dispatchController($scope, $filter, $theme, MobileService, IncidentService) {
     'use strict';
 
-    var vm = this;
-    vm.data = {};
-    vm.data.seeMap = true;
-    vm.data.gridOptionsMobiles = {};
-    vm.data.gridOptionsIncidents = {};
-    vm.data.incidentsAreLoading = true;
-    vm.data.mobilesAreLoading = true;
+    $scope.data = {};
+    $scope.data.seeMap = true;
+    $scope.gridOptionsMobiles = {};
+    $scope.gridOptionsIncidents = {};
+    $scope.data.incidentsAreLoading = true;
+    $scope.data.mobilesAreLoading = true;
     $scope.mobiles = [];
     $scope.incidents = [];
 
-
-    vm.loadMobiles = loadMobiles;
-    vm.loadIncidents = loadIncidents;
+    $scope.loadMobiles = loadMobiles;
+    $scope.loadIncidents = loadIncidents;
 
     $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
 
-    loadIncidents();
-
-    function loadMobiles() {
-      MobileService.getAll()
-      .then(function(response){
-        $scope.mobiles = response.data;
-        vm.data.mobilesAreLoading = false;
-        console.log(response.data);
-      }, function(error){
-        vm.data.mobilesAreLoading = false;
-        console.log(error);
-      })
-    }
-
-    function loadIncidents() {
-
-      IncidentService.getAll()
-      .then(function(response){
-        $scope.incidents = response.data;
-        vm.data.incidentsAreLoading = false;
-        loadMobiles();
-        console.log(response.data);
-      }, function(error){
-        vm.data.incidentsAreLoading = false;
-        console.log(error);
-      })
-    }
-
-    vm.data.gridOptionsMobiles = {
+    $scope.gridOptionsMobiles = {
       data: 'mobiles',
       columnDefs: [
         { displayName: 'Mov', field: 'Movil' },
@@ -60,7 +30,7 @@
         { displayName: 'Est', field: 'ValorGrilla' }]
       };
 
-      vm.data.gridOptionsIncidents = {
+      $scope.gridOptionsIncidents = {
         data: 'incidents',
         columnDefs: [
           { displayName: 'IncidenteId', field: 'IncidenteId' },
@@ -81,5 +51,34 @@
           { displayName: 'Ref', field: 'dmReferencia' }]
         };
 
-    }
-  })();
+        loadIncidents();
+
+        function loadMobiles() {
+          MobileService.getAll()
+          .then(function(response){
+            $scope.mobiles = response.data;
+            $scope.data.mobilesAreLoading = false;
+            console.log(response.data);
+          }, function(error){
+            $scope.data.mobilesAreLoading = false;
+            console.log(error);
+          })
+        }
+
+        function loadIncidents() {
+
+          IncidentService.getAll()
+          .then(function(response){
+            $scope.incidents = response.data;
+            $scope.data.incidentsAreLoading = false;
+            loadMobiles();
+            console.log(response.data);
+          }, function(error){
+            $scope.data.incidentsAreLoading = false;
+            console.log(error);
+          })
+        }
+
+
+      }
+    })();

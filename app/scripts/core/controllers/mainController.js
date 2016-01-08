@@ -1,6 +1,6 @@
 angular.module('theme.core.main_controller', ['theme.core.services'])
-  .controller('MainController', ['$scope', '$theme', '$timeout', 'progressLoader', '$location',
-    function($scope, $theme, $timeout, progressLoader, $location) {
+  .controller('MainController', ['$scope', '$theme', '$timeout', 'progressLoader', '$location','AuthenticationService',
+    function($scope, $theme, $timeout, progressLoader, $location, AuthenticationService) {
     'use strict';
     // $scope.layoutIsSmallScreen = false;
     $scope.layoutFixedHeader = $theme.get('fixedHeader');
@@ -201,7 +201,7 @@ angular.module('theme.core.main_controller', ['theme.core.services'])
     // but for the purposes of this demo this will do :P
     $scope.isLoggedIn = true;
     $scope.logOut = function() {
-      $scope.isLoggedIn = false;
+      AuthenticationService.logout();
     };
     $scope.logIn = function() {
       $scope.isLoggedIn = true;

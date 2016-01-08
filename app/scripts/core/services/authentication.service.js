@@ -7,9 +7,9 @@
   .factory('AuthenticationService', AuthenticationService)
   .factory('Base64', Base64);
 
-  AuthenticationService.$inject = ['Base64', '$http', '$cookieStore', '$rootScope', 'shamanConfiguration'];
+  AuthenticationService.$inject = ['Base64', '$http', '$cookieStore', '$rootScope', 'shamanConfiguration','$location'];
     /* jshint ignore:start */
-  function AuthenticationService(Base64, $http, $cookieStore, $rootScope, shamanConfiguration) {
+  function AuthenticationService(Base64, $http, $cookieStore, $rootScope, shamanConfiguration, $location) {
 
     function login(username, password) {
       return $http.post(shamanConfiguration.url + 'api/authenticate',
@@ -41,8 +41,14 @@
     $http.defaults.headers.common.Authorization = 'Basic';
   }
 
+  function logout() {
+    clearCredentials();
+    $location.path('/');
+  }
+
   var service = {
     login : login,
+    logout : logout,
     setCredentials : setCredentials,
     clearCredentials : clearCredentials
   };
