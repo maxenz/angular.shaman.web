@@ -1,7 +1,12 @@
 angular.module('theme.core.main_controller', ['theme.core.services'])
-  .controller('MainController', ['$scope', '$theme', '$timeout', 'progressLoader', '$location','AuthenticationService',
-    function($scope, $theme, $timeout, progressLoader, $location, AuthenticationService) {
+  .controller('MainController', ['$scope', '$theme', '$timeout', 'progressLoader', '$location','AuthenticationService','MapService',
+    function($scope, $theme, $timeout, progressLoader, $location, AuthenticationService, MapService) {
     'use strict';
+
+    // propias de Shaman
+
+    $scope.mapService = MapService.data;
+
     // $scope.layoutIsSmallScreen = false;
     $scope.layoutFixedHeader = $theme.get('fixedHeader');
     $scope.layoutPageTransitionStyle = $theme.get('pageTransitionStyle');
@@ -56,6 +61,13 @@ angular.module('theme.core.main_controller', ['theme.core.services'])
       $event.stopPropagation();
       $theme.set('sidebarThemeClass', classname);
     };
+
+    $scope.$watch('seeMap', function(newVal, oldVal){
+      if (newVal === undefined || newVal === oldVal){
+        return;
+      }
+      MapService.setMapVisible(newVal);
+    });
 
     $scope.$watch('layoutFixedHeader', function(newVal, oldval) {
       if (newVal === undefined || newVal === oldval) {

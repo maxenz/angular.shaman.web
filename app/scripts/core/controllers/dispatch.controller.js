@@ -9,7 +9,6 @@
     'use strict';
 
     $scope.data = {};
-    $scope.data.seeMap = true;
     $scope.gridOptionsMobiles = {};
     $scope.gridOptionsIncidents = {};
     $scope.data.incidentsAreLoading = true;
@@ -19,8 +18,6 @@
 
     $scope.loadMobiles = loadMobiles;
     $scope.loadIncidents = loadIncidents;
-
-    $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
 
     $scope.gridOptionsMobiles = {
       data: 'mobiles',

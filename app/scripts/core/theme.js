@@ -23,4 +23,5 @@ angular
     'theme.core.login_controller',
     'theme.core.operative_controller',
     'theme.core.dispatch_controller',
+    'theme.core.reception_controller'
   ]);

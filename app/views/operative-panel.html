@@ -1,49 +1,340 @@
-<div id="page-heading">
-  <h1>Panel Operativo</h1>
-</div>
-
-<div class="container-fluid">
-
+<div class="container-fluid" ng-controller="operativeController">
   <div class="row">
-    <tabset panel-tabs="true" panel-class="panel-success">
-      <tab heading="Despacho" ng-controller="dispatchController">
-        <div class="row">
-          <div class="col-xs-8">
-            <panel panel-class="panel-warning" heading="Incidentes">
-              <panel-controls>
-                <label class="checkbox-inline" style="font-size:13px">
-                  <input icheck type="checkbox" id="seeMap" value="{{data.seeMap}}" ng-model="data.seeMap"> Mapa
-                </label>
-              </panel-controls>
-              <div style="height:400px" ng-grid="gridOptionsIncidents"></div>
-              <div class="panel-loading" ng-show="data.incidentsAreLoading">
-                <div class="panel-loader-circular"></div>
-              </div>
-            </panel>
-          </div>
-          <div ng-class="{
-            'col-xs-2' : data.seeMap,
-            'col-xs-4' : !data.seeMap
-          }">
-          <panel panel-class="panel-warning" heading="Móviles">
-            <div style="height:400px" ng-grid="gridOptionsMobiles"></div>
-            <div class="panel-loading" ng-show="data.mobilesAreLoading">
-              <div class="panel-loader-circular"></div>
+    <div ng-class="{
+                      'col-xs-10' : operative.mapService.seeMap,
+                      'col-xs-12' : !operative.mapService.seeMap
+                  }
+      ">
+      <tabset panel-tabs="true" panel-class="panel-success">
+        <tab heading="Despacho" ng-controller="dispatchController">
+          <div class="row">
+            <div class="col-xs-8">
+              <panel panel-class="panel-warning" heading="Incidentes">
+                <div style="height:400px" ng-grid="gridOptionsIncidents"></div>
+                <div class="panel-loading" ng-show="data.incidentsAreLoading">
+                  <div class="panel-loader-circular"></div>
+                </div>
+              </panel>
             </div>
-          </panel>
-        </div>
+            <div class="col-xs-4">
+              <panel panel-class="panel-warning" heading="Móviles">
+                <div style="height:400px" ng-grid="gridOptionsMobiles"></div>
+                <div class="panel-loading" ng-show="data.mobilesAreLoading">
+                  <div class="panel-loader-circular"></div>
+                </div>
+              </panel>
+            </div>
+          </div>
+        </tab>
+        <tab heading="Recepción" ng-controller="receptionController">
+          <ul class="demo-btns reception-menu">
+            <li class="tooltips" data-trigger="hover" data-tooltip="Agregar un nuevo servicio">
+              <button class="btn btn-social btn-spotify"><i class="fa fa-plus"></i></button>
+            </li>
+            <li class="tooltips" data-trigger="hover" data-tooltip="Cancelar el servicio">
+              <button class="btn btn-social btn-youtube"><i class="fa fa-times"></i></button>
+            </li>
+            <li class="tooltips" data-trigger="hover" data-tooltip="Modificar el servicio">
+              <button class="btn btn-social btn-apple"><i class="fa fa-pencil-square-o"></i></button>
+            </li>
+            <li class="tooltips" data-trigger="hover" data-tooltip="Actualizar los datos del servicio">
+              <button class="btn btn-social btn-soundcloud"><i class="fa fa-refresh"></i></button>
+            </li>
+            <li class="tooltips" data-trigger="hover" data-tooltip="Regresa al primer servicio de la fecha">
+              <button class="btn btn-social btn-facebook"><i class="fa fa-step-backward"></i></button>
+            </li>
+            <li class="tooltips" data-trigger="hover" data-tooltip="Regresa al sservicio anterior">
+              <button class="btn btn-social btn-spotify"><i class="fa fa-backward"></i></button>
+            </li>
+            <li class="tooltips" data-trigger="hover" data-tooltip="Avanza al siguiente servicio">
+              <button class="btn btn-social btn-spotify"><i class="fa fa-step-forward"></i></button>
+            </li>
+            <li class="tooltips" data-trigger="hover" data-tooltip="Avanza hasta el último servicio">
+              <button class="btn btn-social btn-facebook"><i class="fa fa-forward"></i></button>
+            </li>
+            <li class="tooltips" data-trigger="hover" data-tooltip="Categorizaciones">
+              <button class="btn btn-social btn-soundcloud"><i class="fa fa-users"></i></button>
+            </li>
+            <li class="tooltips" data-trigger="hover" data-tooltip="Imprimir el servicio">
+              <button class="btn btn-social btn-apple"><i class="fa fa-print"></i></button></li>
+            </ul>
 
-        <div class="col-xs-2" ng-show="data.seeMap">
-          <panel panel-class="panel-warning" heading="Mapa">
-            <ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>
-          </panel>
-        </div>
+            <form name="receptionForm" class="reception-form" novalidate>
+              <div class="row">
 
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Fecha de Incidente</label>
+                    <p class="input-group">
+                      <input type="text" class="form-control datepicker" datepicker-popup="{{datepicker.format}}" ng-model="incident.incDate" is-open="datepicker.opened" datepicker-options="datepicker.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="datepicker.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                      </span>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Nro. de incidente</label>
+                    <input class="form-control" type="text" placeholder="Nro. de incidente" ng-model="incident.number" />
+                  </div>
+                </div>
+
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Telefono</label>
+                    <input class="form-control" type="text" placeholder="Teléfono" ng-model="incident.phoneNumber" />
+                  </div>
+                </div>
+
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Cliente</label>
+                    <input class="form-control" type="text" placeholder="Cliente" ng-model="incident.client" />
+                  </div>
+                </div>
+
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Nro. Afiliado</label>
+                    <input class="form-control" type="text" placeholder="Nro. de afiliado" ng-model="incident.afiliateNumber" />
+                  </div>
+                </div>
+
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Aviso</label>
+                    <input class="form-control" type="text" placeholder="Aviso" ng-model="incident.advertise" />
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row">
+
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Localidad</label>
+                    <input class="form-control" type="text" placeholder="Localidad" ng-model="incident.locAbreviature" />
+                  </div>
+                </div>
+
+                <div class="col-xs-5">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Descripcion de la localidad</label>
+                    <input class="form-control" type="text" placeholder="Descripcion de la localidad" ng-model="incident.locality" />
+                  </div>
+                </div>
+
+                <div class="col-xs-5">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Partido</label>
+                    <input class="form-control" type="text" placeholder="Partido" ng-model="incident.partido" />
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row">
+                <div class="col-xs-6">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Domicilio</label>
+                    <input class="form-control" type="text" placeholder="Domicilio" ng-model="incident.domicile.street" />
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Altura</label>
+                    <input class="form-control" type="text" placeholder="Altura" ng-model="incident.domicile.height" />
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Piso</label>
+                    <input class="form-control" type="text" placeholder="Piso" ng-model="incident.domicile.floor" />
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Departamento</label>
+                    <input class="form-control" type="text" placeholder="Departamento" ng-model="incident.domicile.department" />
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row">
+
+                <div class="col-xs-4">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Entrecalle 1</label>
+                    <input class="form-control" type="text" placeholder="Entrecalle 1" ng-model="incident.domicile.betweenFirstStreet" />
+                  </div>
+                </div>
+
+                <div class="col-xs-4">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Entrecalle 2</label>
+                    <input class="form-control" type="text" placeholder="Entrecalle 2" ng-model="incident.domicile.betweenSecondStreet" />
+                  </div>
+                </div>
+
+                <div class="col-xs-4">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Referencias</label>
+                    <input class="form-control" type="text" placeholder="Referencias" ng-model="incident.references" />
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row">
+
+                <div class="col-xs-1">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Sexo</label>
+                    <select class="form-control" id="source">
+                      <option value="1">M</option>
+                      <option value="2">F</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-xs-1">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Edad</label>
+                    <input class="form-control" type="number" placeholder="Edad" ng-model="incident.age" />
+                  </div>
+                </div>
+
+                <div class="col-xs-8">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Motivo de llamada - sintomas</label>
+                    <input class="form-control" type="text" placeholder="Sintomas" ng-model="incident.symptoms" />
+                  </div>
+                </div>
+
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Grado</label>
+                    <select class="form-control" id="source2">
+                      <option value="1">Grado1</option>
+                      <option value="2">Grado2</option>
+                    </select>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row">
+
+                <div class="col-xs-6">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Paciente</label>
+                    <input class="form-control" type="text" placeholder="Paciente" ng-model="incident.patient" />
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <label for="#" class="control-label">IVA</label>
+                    <select class="form-control" id="source4">
+                      <option value="1">Grado1</option>
+                      <option value="2">Grado2</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Plan</label>
+                    <select class="form-control" id="source3">
+                      <option value="1">Grado1</option>
+                      <option value="2">Grado2</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Copago</label>
+                    <input class="form-control" type="text" placeholder="Copago" ng-model="incident.copayment" />
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row">
+
+                <div class="col-xs-1">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Curso</label>
+                    <input class="form-control" type="text" placeholder="Curso" ng-model="incident.course" />
+                  </div>
+                </div>
+
+                <div class="col-xs-1">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Div</label>
+                    <input class="form-control" type="text" placeholder="Div" ng-model="incident.div" />
+                  </div>
+                </div>
+
+                <div class="col-xs-1">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Turno</label>
+                    <input class="form-control" type="text" placeholder="Turno" ng-model="incident.turn" />
+                  </div>
+                </div>
+
+                <div class="col-xs-1">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Diagnostico</label>
+                    <input class="form-control" type="text" placeholder="Diagnostico" ng-model="incident.diagnosis" />
+                  </div>
+                </div>
+
+                <div class="col-xs-4">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Cierre</label>
+                    <input class="form-control" type="text" placeholder="Cierre" ng-model="incident.closing" />
+                  </div>
+                </div>
+
+                <div class="col-xs-3">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Paciente derivado en</label>
+                    <input class="form-control" type="text" placeholder="Paciente derivado en" ng-model="incident.patientDerivedIn" />
+                  </div>
+                </div>
+
+                <div class="col-xs-1">
+                  <div class="form-group">
+                    <label for="#" class="control-label">Viaje</label>
+                    <input type="checkbox"  class="js-switch" ng-model="incident.tripRealized" ui-switch="{color: '#7dcc93', secondaryColor: '#c5cbd1'}" />
+                  </div>
+                </div>
+
+              </div>
+
+              <hr/>
+              <div class="row">
+                <div class="btn-group" role="group" aria-label="..." style="float:right">
+                  <button class="btn btn-primary" ng-click="incident.save()">Guardar cambios</button>
+                  <button class="btn btn-danger" ng-click="incident.cancel()">Cancelar</button>
+                </div>
+              </div>
+
+            </form>
+
+
+          </tab>
+        </tabset>
       </div>
-    </tab>
-    <tab heading="Recepción">
-      <p></p>
-    </tab>
-  </tabset>
-</div>
-</div>
+      <div class="col-xs-2" ng-show="operative.mapService.seeMap">
+        <tabset panel-tabs="true" panel-class="panel-success">
+          <tab heading="Mapa">
+            <ui-gmap-google-map center='operative.data.map.center' zoom='operative.data.map.zoom'></ui-gmap-google-map>
+          </tab>
+        </tabset>
+      </div>
+    </div>
+  </div>
