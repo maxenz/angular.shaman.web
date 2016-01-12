@@ -29,7 +29,7 @@
         <tab heading="Recepción" ng-controller="receptionController">
           <ul class="demo-btns reception-menu">
             <li class="tooltips" data-trigger="hover" data-tooltip="Agregar un nuevo servicio">
-              <button class="btn btn-social btn-spotify"><i class="fa fa-plus"></i></button>
+              <button class="btn btn-social btn-spotify" ng-click="createIncident()"><i class="fa fa-plus"></i></button>
             </li>
             <li class="tooltips" data-trigger="hover" data-tooltip="Cancelar el servicio">
               <button class="btn btn-social btn-youtube"><i class="fa fa-times"></i></button>
@@ -76,15 +76,15 @@
 
                 <div class="col-xs-2">
                   <div class="form-group">
-                    <label for="#" class="control-label">Nro. de incidente</label>
-                    <input class="form-control" type="text" placeholder="Nro. de incidente" ng-model="incident.number" />
+                    <label for="#" class="control-label">Nro de incidente</label>
+                    <input class="form-control" type="text" ng-disabled="true" placeholder="Nro. de incidente" ng-model="incident.number" />
                   </div>
                 </div>
 
                 <div class="col-xs-2">
                   <div class="form-group">
                     <label for="#" class="control-label">Telefono</label>
-                    <input class="form-control" type="text" placeholder="Teléfono" ng-model="incident.phoneNumber" />
+                    <input class="form-control" type="text" placeholder="Teléfono" ng-model="incident.phoneNumber" ng-blur="getDataByPhone()" />
                   </div>
                 </div>
 
@@ -318,8 +318,8 @@
               <hr/>
               <div class="row">
                 <div class="btn-group" role="group" aria-label="..." style="float:right">
-                  <button class="btn btn-primary" ng-click="incident.save()">Guardar cambios</button>
-                  <button class="btn btn-danger" ng-click="incident.cancel()">Cancelar</button>
+                  <button class="btn btn-primary" ng-click="saveIncident()">Guardar cambios</button>
+                  <button class="btn btn-danger" ng-click="cancelIncident()">Cancelar</button>
                 </div>
               </div>
 

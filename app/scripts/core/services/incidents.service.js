@@ -14,8 +14,13 @@
       return $http.get(shamanConfiguration.url + 'api/incidents');
     }
 
+    function getByPhone(phone) {
+      return $http.get(shamanConfiguration.url + 'api/incidents/GetByPhone?phone=' + phone);
+    }
+
     var service = {
-      getAll : getAll
+      getAll     : getAll,
+      getByPhone : getByPhone
     };
 
     return service;
