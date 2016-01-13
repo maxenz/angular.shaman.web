@@ -8,7 +8,7 @@
   .factory('Base64', Base64);
 
   AuthenticationService.$inject = ['Base64', '$http', '$cookieStore', '$rootScope', 'shamanConfiguration','$location'];
-    /* jshint ignore:start */
+  /* jshint ignore:start */
   function AuthenticationService(Base64, $http, $cookieStore, $rootScope, shamanConfiguration, $location) {
 
     function login(username, password) {
@@ -43,7 +43,7 @@
 
   function logout() {
     clearCredentials();
-    $location.path('/');
+    $location.path('/login');
   }
 
   var service = {

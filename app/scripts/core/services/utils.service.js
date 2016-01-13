@@ -9,13 +9,16 @@
   .module('theme.core.services')
   .factory('UtilsService', UtilsService)
 
-  function UtilsService() {
+  UtilsService.$inject = ['$http', 'shamanConfiguration'];
+
+  function UtilsService($http, shamanConfiguration) {
 
     var service = {
-      toCamel						        : toCamel,
-      secondsToTime					    : secondsToTime,
-      getObjectByIdInArray			: getObjectByIdInArray,
-      stringStartsWith				  : stringStartsWith,
+      toCamel						              : toCamel,
+      secondsToTime					          : secondsToTime,
+      getObjectByPropertyInArray			: getObjectByPropertyInArray,
+      stringStartsWith				        : stringStartsWith,
+      getPromise                      : getPromise
     };
 
     return service;
@@ -60,11 +63,11 @@
       return moment.duration(value, "seconds").format("hh:mm:ss", { trim: false});
     }
 
-    function getObjectByIdInArray(vec, id) {
+    function getObjectByPropertyInArray(vec, property, value) {
       var objSearched = null;
       if (vec) {
         vec.forEach(function(obj){
-          if (obj.id === id) {
+          if (obj[property] === value) {
             objSearched = obj;
           }
         });
@@ -75,6 +78,10 @@
 
     function stringStartsWith(string, prefix) {
       return string.slice(0, prefix.length) == prefix;
+    }
+
+    function getPromise(route) {
+      return $http.get(shamanConfiguration.url + route);
     }
 
   }

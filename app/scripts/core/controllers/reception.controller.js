@@ -5,10 +5,20 @@
   .controller('receptionController', receptionController);
 
   receptionController.$inject = ['$scope', '$filter', '$theme', 'MobileService',
-  'IncidentService', 'UtilsService', '$modal', '$bootbox'];
+  'IncidentService', 'UtilsService', '$modal', '$bootbox', 'SettingsService'];
 
-  function receptionController($scope, $filter, $theme, MobileService, IncidentService, UtilsService, $modal, $bootbox) {
+  function receptionController($scope, $filter, $theme, MobileService, IncidentService, UtilsService, $modal, $bootbox,
+     SettingsService) {
     'use strict';
+
+    $scope.sexOptions = [ {id: 1, label: 'M'}, {id: 2, label: 'F'}];
+    $scope.operativeGradeOptions = [];
+    SettingsService.settings.operativeGrades.forEach(function(grade){
+      $scope.operativeGradeOptions.push({id: grade.id, label: grade.descripcion});
+    });
+    $scope.sexSelected = $scope.sexOptions[0];
+    $scope.operativeGradeSelected = $scope.operativeGradeOptions[0];
+
 
     $scope.incident = {};
 
@@ -59,16 +69,29 @@
 
     function resetIncident() {
       $scope.incident = {};
+      $scope.incident.domicile = {};
       $scope.incident.incDate = moment().format("DD/MM/YYYY");
     }
 
     function setIncident(incident) {
 
-      $scope.incident = {};
+      resetIncident();
       $scope.incident.age = incident.edad;
       $scope.incident.afiliateNumber = incident.nroAfiliado;
-      $scope.incident.client = incident.cliente;
+      $scope.incident.client = incident.abreviaturaId;
+      $scope.incident.advertise = incident.aviso;
       $scope.incident.patient = incident.paciente;
+      $scope.incident.phoneNumber = incident.telefono;
+      $scope.incident.locAbreviature = incident.localidad;
+      $scope.incident.locality = incident.localidadDescripcion;
+      $scope.incident.partido = incident.partido;
+      $scope.incident.domicile.street = incident.calle;
+      $scope.incident.domicile.height = incident.altura;
+      $scope.incident.domicile.floor = incident.piso;
+      $scope.incident.domicile.department = incident.departamento;
+      $scope.incident.domicile.betweenFirstStreet = incident.entreCalle1;
+      $scope.incident.domicile.betweenSecondStreet = incident.entreCalle2;
+      $scope.sexSelected = UtilsService.getObjectByPropertyInArray($scope.sexOptions, 'label', incident.sexo);
 
     }
 
