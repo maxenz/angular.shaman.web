@@ -20,7 +20,6 @@
     "flot.tooltip": "*",
     "angular-ui-tree": "2.1.5",
     "moment": "~2.8.0",
-    "jqvmap": "*",
     "ng-grid": "2.0.11",
     "angular-xeditable": "0.1.8",
     "iCheck": "1.0.2",
@@ -91,15 +90,6 @@
         "ui/jquery.ui.mouse.js",
         "ui/jquery.ui.draggable.js",
         "ui/jquery.ui.resizable.js"
-      ]
-    },
-    "jqvmap": {
-      "main": [
-        "jqvmap/jquery.vmap.js",
-        "jqvmap/maps/jquery.vmap.world.js",
-        "jqvmap/maps/jquery.vmap.europe.js",
-        "jqvmap/maps/jquery.vmap.usa.js",
-        "jqvmap/data/jquery.vmap.sampledata.js"
       ]
     },
     "iCheck": {

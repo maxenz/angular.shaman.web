@@ -9,7 +9,7 @@
       <tab heading="Despacho" ng-controller="dispatchController">
         <div class="row">
           <div class="col-xs-8">
-            <panel panel-class="panel-warning" heading="Incidentes">
+            <panel panel-class="panel-success panel-no-padding" heading="Incidentes">
               <div style="height:400px" ng-grid="gridOptionsIncidents"></div>
               <div class="panel-loading" ng-show="data.incidentsAreLoading">
                 <div class="panel-loader-circular"></div>
@@ -17,7 +17,7 @@
             </panel>
           </div>
           <div class="col-xs-4">
-            <panel panel-class="panel-warning" heading="Móviles">
+            <panel panel-class="panel-success panel-no-padding" heading="Móviles">
               <div style="height:400px" ng-grid="gridOptionsMobiles"></div>
               <div class="panel-loading" ng-show="data.mobilesAreLoading">
                 <div class="panel-loader-circular"></div>
@@ -303,11 +303,7 @@
       </tabset>
     </div>
     <div class="col-xs-2" ng-show="operative.mapService.seeMap">
-      <tabset panel-tabs="true" panel-class="panel-success">
-        <tab heading="Mapa">
-          <ui-gmap-google-map center='operative.data.map.center' zoom='operative.data.map.zoom'></ui-gmap-google-map>
-        </tab>
-      </tabset>
+      <ui-gmap-google-map center='operative.data.map.center' zoom='operative.data.map.zoom'></ui-gmap-google-map>
     </div>
   </div>
 </div>
