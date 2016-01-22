@@ -30,13 +30,7 @@
 
     function setInitialSettings() {
 
-      getInitialInformation()
-        .then(function(response){
-          console.log(response);
-          service.settings.operativeGrades = UtilsService.toCamel(response.operativeGrades.data);
-        }, function(error){
-          console.log(error);
-        });
+      return getInitialInformation();
 
     }
 

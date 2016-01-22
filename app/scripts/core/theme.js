@@ -11,6 +11,7 @@ angular
     'sun.scrollable',
     'ui.bootstrap',
     'ui.select',
+    'toastr',
     'uiGmapgoogle-maps',
     'theme.core.templates',
     'theme.core.template_overrides',

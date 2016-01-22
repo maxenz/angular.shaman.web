@@ -4,8 +4,8 @@
   .module('theme.core.login_controller', [])
   .controller('loginController', loginController);
 
-  loginController.$inject = ['$scope', '$filter', '$theme', '$rootScope', '$location', 'AuthenticationService', 'SettingsService'];
-  function loginController($scope, $filter, $theme, $rootScope, $location, AuthenticationService, SettingsService) {
+  loginController.$inject = ['$scope', '$filter', '$theme', '$rootScope', '$location', 'AuthenticationService', 'SettingsService', 'UtilsService'];
+  function loginController($scope, $filter, $theme, $rootScope, $location, AuthenticationService, SettingsService, UtilsService) {
     'use strict';
 
     $scope.data = {};
@@ -25,8 +25,12 @@
       AuthenticationService.login($scope.data.username, $scope.data.password)
       .then(function(data){
         AuthenticationService.setCredentials($scope.data.username, $scope.data.password);
-        SettingsService.setInitialSettings();
-        $location.path('/');
+        SettingsService.setInitialSettings()
+        .then(function(response){
+          SettingsService.settings.operativeGrades = UtilsService.toCamel(response.operativeGrades.data);
+          $location.path('/');
+        });
+
       }, function(error){
         switch (error.status) {
           case 401:

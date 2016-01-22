@@ -5,14 +5,15 @@
   .controller('receptionController', receptionController);
 
   receptionController.$inject = ['$scope', '$filter', '$theme', 'MobileService',
-  'IncidentService', 'UtilsService', '$modal', '$bootbox', 'SettingsService'];
+  'IncidentService', 'UtilsService', '$modal', '$bootbox', 'SettingsService', 'ClientsService', 'toastr'];
 
   function receptionController($scope, $filter, $theme, MobileService, IncidentService, UtilsService, $modal, $bootbox,
-     SettingsService) {
+     SettingsService, ClientsService, toastr) {
     'use strict';
 
     $scope.sexOptions = [ {id: 1, label: 'M'}, {id: 2, label: 'F'}];
     $scope.operativeGradeOptions = [];
+    $scope.plansOptions = [];
     SettingsService.settings.operativeGrades.forEach(function(grade){
       $scope.operativeGradeOptions.push({id: grade.id, label: grade.descripcion});
     });
@@ -26,6 +27,7 @@
     $scope.cancelIncident = cancelIncident;
     $scope.createIncident = createIncident;
     $scope.getDataByPhone = getDataByPhone;
+    $scope.validateClient = validateClient;
 
     $scope.datepicker = {};
     $scope.datepicker.format = 'dd/MM/yyyy';
@@ -65,6 +67,33 @@
         });
       }
 
+    }
+
+    function validateClient() {
+      ClientsService.getClientWithValidation($scope.incident.client)
+        .then(function(response){
+          console.log(response.data);
+          var client = UtilsService.toCamel(response.data);
+          if (!client) {
+            toastr.warning("El cliente no se encuentra activo");
+          }
+          if (client.estadoMorosidad) {
+            toastr.warning("El estado moroso del cliente es : " + client.estadoMorosidad);
+          }
+
+          ClientsService.getPlansByClient(client.id)
+            .then(function(response){
+              var plans = UtilsService.toCamel(response.data);
+              plans.forEach(function(plan){
+                $scope.plansOptions.push({id: plan.id, label: plan.descripcion});
+              });
+            }, function(error){
+              console.log(error);
+            });
+
+        }, function(error){
+          console.log(error);
+        });
     }
 
     function resetIncident() {
