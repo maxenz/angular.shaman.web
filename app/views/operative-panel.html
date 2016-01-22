@@ -26,10 +26,10 @@
           </div>
         </div>
       </tab>
-      <tab heading="Recepción" ng-controller="receptionController">
+      <tab heading="Recepción" ng-controller="receptionController as receptionCtrl">
         <ul class="demo-btns reception-menu">
           <li class="tooltips" data-trigger="hover" data-tooltip="Agregar un nuevo servicio">
-            <button class="btn btn-social btn-spotify" ng-click="createIncident()"><i class="fa fa-plus"></i></button>
+            <button class="btn btn-social btn-spotify" ng-click="receptionCtrl.createIncident()"><i class="fa fa-plus"></i></button>
           </li>
           <li class="tooltips" data-trigger="hover" data-tooltip="Cancelar el servicio">
             <button class="btn btn-social btn-youtube"><i class="fa fa-times"></i></button>
@@ -66,9 +66,9 @@
                 <div class="form-group">
                   <label for="#" class="control-label">Fecha de Incidente</label>
                   <p class="input-group">
-                    <input type="text" class="form-control datepicker" datepicker-popup="{{datepicker.format}}" ng-model="incident.incDate" ng-disabled="true" is-open="datepicker.opened" datepicker-options="datepicker.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                    <input type="text" class="form-control datepicker" datepicker-popup="{{receptionCtrl.datepicker.format}}" ng-model="receptionCtrl.incident.incDate" ng-disabled="true" is-open="receptionCtrl.datepicker.opened" datepicker-options="receptionCtrl.datepicker.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
                     <span class="input-group-btn">
-                      <button type="button" class="btn btn-default" ng-click="datepicker.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                      <button type="button" class="btn btn-default" ng-click="receptionCtrl.datepicker.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                   </p>
                 </div>
@@ -77,35 +77,35 @@
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Nro de incidente</label>
-                  <input class="form-control" type="text" ng-disabled="true" placeholder="Nro. de incidente" ng-model="incident.number" />
+                  <input class="form-control" type="text" ng-disabled="true" placeholder="Nro. de incidente" ng-model="receptionCtrl.incident.number" />
                 </div>
               </div>
 
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Telefono</label>
-                  <input class="form-control" type="text" placeholder="Teléfono" ng-model="incident.phoneNumber" ng-blur="getDataByPhone()" />
+                  <input class="form-control" type="text" placeholder="Teléfono" ng-model="receptionCtrl.incident.phoneNumber" ng-blur="receptionCtrl.getDataByPhone()" />
                 </div>
               </div>
 
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Cliente</label>
-                  <input class="form-control" type="text" placeholder="Cliente" ng-model="incident.client" ng-blur="validateClient()" />
+                  <input class="form-control" type="text" placeholder="Cliente" ng-model="receptionCtrl.incident.client" ng-blur="receptionCtrl.validateClient()" />
                 </div>
               </div>
 
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Nro. Afiliado</label>
-                  <input class="form-control" type="text" placeholder="Nro. de afiliado" ng-model="incident.afiliateNumber" />
+                  <input class="form-control" type="text" placeholder="Nro. de afiliado" ng-model="receptionCtrl.incident.affiliateNumber" ng-blur="receptionCtrl.validateAffiliate()" />
                 </div>
               </div>
 
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Aviso</label>
-                  <input class="form-control" type="text" placeholder="Aviso" ng-model="incident.advertise" />
+                  <input class="form-control" type="text" placeholder="Aviso" ng-model="receptionCtrl.incident.advertise" />
                 </div>
               </div>
 
@@ -116,21 +116,21 @@
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Localidad</label>
-                  <input class="form-control" type="text" placeholder="Localidad" ng-model="incident.locAbreviature" />
+                  <input class="form-control" type="text" placeholder="Localidad" ng-model="receptionCtrl.incident.locAbreviature" />
                 </div>
               </div>
 
               <div class="col-xs-5">
                 <div class="form-group">
                   <label for="#" class="control-label">Descripcion de la localidad</label>
-                  <input class="form-control" type="text" ng-disabled="true" placeholder="Descripcion de la localidad" ng-model="incident.locality" />
+                  <input class="form-control" type="text" ng-disabled="true" placeholder="Descripcion de la localidad" ng-model="receptionCtrl.incident.locality" />
                 </div>
               </div>
 
               <div class="col-xs-5">
                 <div class="form-group">
                   <label for="#" class="control-label">Partido</label>
-                  <input class="form-control" type="text" placeholder="Partido" ng-model="incident.partido" />
+                  <input class="form-control" type="text" placeholder="Partido" ng-model="receptionCtrl.incident.partido" />
                 </div>
               </div>
 
@@ -140,25 +140,25 @@
               <div class="col-xs-6">
                 <div class="form-group">
                   <label for="#" class="control-label">Domicilio</label>
-                  <input class="form-control" type="text" placeholder="Domicilio" ng-model="incident.domicile.street" />
+                  <input class="form-control" type="text" placeholder="Domicilio" ng-model="receptionCtrl.incident.domicile.street" />
                 </div>
               </div>
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Altura</label>
-                  <input class="form-control" type="text" placeholder="Altura" ng-model="incident.domicile.height" />
+                  <input class="form-control" type="text" placeholder="Altura" ng-model="receptionCtrl.incident.domicile.height" />
                 </div>
               </div>
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Piso</label>
-                  <input class="form-control" type="text" placeholder="Piso" ng-model="incident.domicile.floor" />
+                  <input class="form-control" type="text" placeholder="Piso" ng-model="receptionCtrl.incident.domicile.floor" />
                 </div>
               </div>
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Departamento</label>
-                  <input class="form-control" type="text" placeholder="Departamento" ng-model="incident.domicile.department" />
+                  <input class="form-control" type="text" placeholder="Departamento" ng-model="receptionCtrl.incident.domicile.department" />
                 </div>
               </div>
 
@@ -169,21 +169,21 @@
               <div class="col-xs-4">
                 <div class="form-group">
                   <label for="#" class="control-label">Entrecalle 1</label>
-                  <input class="form-control" type="text" placeholder="Entrecalle 1" ng-model="incident.domicile.betweenFirstStreet" />
+                  <input class="form-control" type="text" placeholder="Entrecalle 1" ng-model="receptionCtrl.incident.domicile.betweenFirstStreet" />
                 </div>
               </div>
 
               <div class="col-xs-4">
                 <div class="form-group">
                   <label for="#" class="control-label">Entrecalle 2</label>
-                  <input class="form-control" type="text" placeholder="Entrecalle 2" ng-model="incident.domicile.betweenSecondStreet" />
+                  <input class="form-control" type="text" placeholder="Entrecalle 2" ng-model="receptionCtrl.incident.domicile.betweenSecondStreet" />
                 </div>
               </div>
 
               <div class="col-xs-4">
                 <div class="form-group">
                   <label for="#" class="control-label">Referencias</label>
-                  <input class="form-control" type="text" placeholder="Referencias" ng-model="incident.references" />
+                  <input class="form-control" type="text" placeholder="Referencias" ng-model="receptionCtrl.incident.references" />
                 </div>
               </div>
 
@@ -194,28 +194,28 @@
               <div class="col-xs-1">
                 <div class="form-group">
                   <label for="#" class="control-label">Sexo</label>
-                  <select class="form-control" ng-options="item as item.label for item in sexOptions track by item.id" ng-model="sexSelected"></select>
+                  <select class="form-control" ng-options="item as item.label for item in receptionCtrl.sexOptions track by item.id" ng-model="receptionCtrl.sexSelected"></select>
                 </div>
               </div>
 
               <div class="col-xs-1">
                 <div class="form-group">
                   <label for="#" class="control-label">Edad</label>
-                  <input class="form-control" type="number" placeholder="Edad" ng-model="incident.age" />
+                  <input class="form-control" type="number" placeholder="Edad" ng-model="receptionCtrl.incident.age" />
                 </div>
               </div>
 
               <div class="col-xs-7">
                 <div class="form-group">
                   <label for="#" class="control-label">Motivo de llamada - sintomas</label>
-                  <input class="form-control" type="text" placeholder="Sintomas" ng-model="incident.symptoms" />
+                  <input class="form-control" type="text" placeholder="Sintomas" ng-model="receptionCtrl.incident.symptoms" />
                 </div>
               </div>
 
               <div class="col-xs-3">
                 <div class="form-group">
                   <label for="#" class="control-label">Grado</label>
-                  <select class="form-control" ng-options="item as item.label for item in operativeGradeOptions track by item.id" ng-model="operativeGradeSelected"></select>
+                  <select class="form-control" ng-options="item as item.label for item in receptionCtrl.operativeGradeOptions track by item.id" ng-model="receptionCtrl.operativeGradeSelected"></select>
                 </div>
               </div>
 
@@ -226,7 +226,7 @@
               <div class="col-xs-6">
                 <div class="form-group">
                   <label for="#" class="control-label">Paciente</label>
-                  <input class="form-control" type="text" placeholder="Paciente" ng-model="incident.patient" />
+                  <input class="form-control" type="text" placeholder="Paciente" ng-model="receptionCtrl.incident.patient" />
                 </div>
               </div>
               <div class="col-xs-2">
@@ -241,13 +241,13 @@
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Plan</label>
-                  <select class="form-control" ng-options="item as item.label for item in plansOptions track by item.id" ng-model="planSelected"></select>
+                  <select class="form-control" ng-options="item as item.label for item in receptionCtrl.plansOptions track by item.id" ng-model="receptionCtrl.planSelected"></select>
                 </div>
               </div>
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Copago</label>
-                  <input class="form-control" type="text" placeholder="Copago" ng-model="incident.copayment" />
+                  <input class="form-control" type="text" placeholder="Copago" ng-model="receptionCtrl.incident.copayment" />
                 </div>
               </div>
 
@@ -258,28 +258,28 @@
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Diagnostico</label>
-                  <input class="form-control" type="text" placeholder="Diagnostico" ng-model="incident.diagnosis" />
+                  <input class="form-control" type="text" placeholder="Diagnostico" ng-model="receptionCtrl.incident.diagnosis" />
                 </div>
               </div>
 
               <div class="col-xs-4">
                 <div class="form-group">
                   <label for="#" class="control-label">Cierre</label>
-                  <input class="form-control" type="text" placeholder="Cierre" ng-model="incident.closing" />
+                  <input class="form-control" type="text" placeholder="Cierre" ng-model="receptionCtrl.incident.closing" />
                 </div>
               </div>
 
               <div class="col-xs-4">
                 <div class="form-group">
                   <label for="#" class="control-label">Paciente derivado en</label>
-                  <input class="form-control" type="text" placeholder="Paciente derivado en" ng-model="incident.patientDerivedIn" />
+                  <input class="form-control" type="text" placeholder="Paciente derivado en" ng-model="receptionCtrl.incident.patientDerivedIn" />
                 </div>
               </div>
 
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Viaje</label>
-                  <input type="checkbox"  class="js-switch" ng-model="incident.tripRealized" ui-switch="{color: '#7dcc93', secondaryColor: '#c5cbd1'}" />
+                  <input type="checkbox"  class="js-switch" ng-model="receptionCtrl.incident.tripRealized" ui-switch="{color: '#7dcc93', secondaryColor: '#c5cbd1'}" />
                 </div>
               </div>
 
@@ -288,8 +288,8 @@
             <hr/>
             <div class="row">
               <div class="btn-group" role="group" aria-label="..." style="float:right">
-                <button class="btn btn-primary" ng-click="saveIncident()">Guardar cambios</button>
-                <button class="btn btn-danger" ng-click="cancelIncident()">Cancelar</button>
+                <button class="btn btn-primary" ng-click="receptionCtrl.saveIncident()">Guardar cambios</button>
+                <button class="btn btn-danger" ng-click="receptionCtrl.cancelIncident()">Cancelar</button>
               </div>
             </div>
 

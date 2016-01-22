@@ -18,9 +18,15 @@
       return UtilsService.getPromise('api/clients/GetPlans?clientId=' + id);
     }
 
+    function getAffiliateWithValidation(clientAbreviaturaId, affiliateNumber) {
+      return UtilsService.getPromise('api/clients/getAffiliateWithValidation?clientAbreviaturaId=' + clientAbreviaturaId +
+       '&affiliateNumber = ' + affiliateNumber);
+    }
+
     var service = {
-      getClientWithValidation : getClientWithValidation,
-      getPlansByClient        : getPlansByClient
+      getClientWithValidation    : getClientWithValidation,
+      getPlansByClient           : getPlansByClient,
+      getAffiliateWithValidation : getAffiliateWithValidation
 
     };
 
