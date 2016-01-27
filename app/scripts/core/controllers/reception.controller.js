@@ -24,13 +24,16 @@
 
 
       vm.incident = {};
+      vm.incident.inputBlocked = true;
 
-      vm.saveIncident   = saveIncident;
-      vm.cancelIncident = cancelIncident;
-      vm.createIncident = createIncident;
-      vm.getDataByPhone = getDataByPhone;
-      vm.validateClient = validateClient;
+      vm.saveIncident      = saveIncident;
+      vm.cancelIncident    = cancelIncident;
+      vm.createIncident    = createIncident;
+      vm.getDataByPhone    = getDataByPhone;
+      vm.validateClient    = validateClient;
       vm.validateAffiliate = validateAffiliate;
+      vm.validateLocality  = validateLocality;
+
 
       vm.datepicker = {};
       vm.datepicker.format = 'dd/MM/yyyy';
@@ -42,6 +45,7 @@
 
       function createIncident() {
         resetIncident();
+        vm.incident.inputBlocked = false;
       }
 
       function saveIncident() {
@@ -57,6 +61,8 @@
           IncidentService.getByPhone(vm.incident.phoneNumber)
           .then(function(response){
             var data = UtilsService.toCamel(response.data);
+            console.log('data de phone');
+            console.log(data);
             if (data.paciente) {
               $bootbox.confirm('¿El paciente es ' + data.paciente + '?', function(result) {
                 if (result) {
@@ -73,37 +79,59 @@
       }
 
       function validateClient() {
-        ClientsService.getClientWithValidation(vm.incident.client)
-        .then(function(response){
-          console.log(response.data);
-          var client = UtilsService.toCamel(response.data);
-          if (!client) {
-            toastr.warning("El cliente no se encuentra activo");
-          }
-          if (client.estadoMorosidad) {
-            toastr.warning("El estado moroso del cliente es : " + client.estadoMorosidad);
-          }
-
-          ClientsService.getPlansByClient(client.id)
+        if (vm.incident.client) {
+          ClientsService.getClientWithValidation(vm.incident.client)
           .then(function(response){
-            var plans = UtilsService.toCamel(response.data);
-            plans.forEach(function(plan){
-              vm.plansOptions.push({id: plan.id, label: plan.descripcion});
+            console.log(response.data);
+            var client = UtilsService.toCamel(response.data);
+            if (!client) {
+              toastr.warning("El cliente no se encuentra activo");
+            }
+            if (client.estadoMorosidad) {
+              toastr.warning(client.estadoMorosidad);
+            }
+
+            ClientsService.getPlansByClient(client.id)
+            .then(function(response){
+              var plans = UtilsService.toCamel(response.data);
+              plans.forEach(function(plan){
+                vm.plansOptions.push({id: plan.id, label: plan.descripcion});
+              });
+            }, function(error){
+              console.log(error);
             });
+
           }, function(error){
             console.log(error);
           });
-
-        }, function(error){
-          console.log(error);
-        });
+        }
       }
 
       function validateAffiliate() {
-        ClientsService.getAffiliateWithValidation(vm.incident.client, vm.incident.affiliateNumber)
-        .then(function(response) {
-          console.log(response.data);
-        });
+        if (vm.incident.client && vm.incident.affiliateNumber) {
+          ClientsService.getAffiliateWithValidation(vm.incident.client, vm.incident.affiliateNumber)
+          .then(function(response) {
+            var data = UtilsService.toCamel(response.data);
+            console.log('data de afiiliate');
+            console.log(data);
+            setIncident(data);
+          }, function(error){
+            console.log(error);
+          });
+        }
+
+      }
+
+      function validateLocality() {
+        if (vm.incident.locAbreviature) {
+          IncidentService.validateLocality(vm.incident.locAbreviature)
+            .then(function(response) {
+              var locality = UtilsService.toCamel(response.data);
+              setLocality(locality);
+            }, function(error) {
+              console.log(error);
+            })
+        }
       }
 
       function resetIncident() {
@@ -113,8 +141,6 @@
       }
 
       function setIncident(incident) {
-
-        resetIncident();
         vm.incident.age = incident.edad;
         vm.incident.afiliateNumber = incident.nroAfiliado;
         vm.incident.client = incident.abreviaturaId;
@@ -131,6 +157,13 @@
         vm.incident.domicile.betweenFirstStreet = incident.entreCalle1;
         vm.incident.domicile.betweenSecondStreet = incident.entreCalle2;
         vm.sexSelected = UtilsService.getObjectByPropertyInArray(vm.sexOptions, 'label', incident.sexo);
+
+      }
+
+      function setLocality(locality) {
+        vm.incident.partido = locality.partido.descripcion +
+         ' (' + locality.province.abreviaturaId + '-' + locality.geographicZone.descripcion + ')';
+        vm.incident.locality = locality.descripcion;
 
       }
 

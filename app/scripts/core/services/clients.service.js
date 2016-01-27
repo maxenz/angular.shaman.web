@@ -19,8 +19,8 @@
     }
 
     function getAffiliateWithValidation(clientAbreviaturaId, affiliateNumber) {
-      return UtilsService.getPromise('api/clients/getAffiliateWithValidation?clientAbreviaturaId=' + clientAbreviaturaId +
-       '&affiliateNumber = ' + affiliateNumber);
+      return UtilsService.getPromise('api/clients/GetAffiliateWithValidation?clientAbreviaturaId=' + clientAbreviaturaId +
+       '&affiliateNumber=' + affiliateNumber);
     }
 
     var service = {
