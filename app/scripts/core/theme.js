@@ -12,6 +12,7 @@ angular
     'ui.bootstrap',
     'ui.select',
     'toastr',
+    'angularModalService',
     'uiGmapgoogle-maps',
     'theme.core.templates',
     'theme.core.template_overrides',

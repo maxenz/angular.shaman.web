@@ -193,6 +193,19 @@ angular.module('theme.core.templates', []).run(['$templateCache', function ($tem
     "</a>\n"
   );
 
+  $templateCache.put('templates/affiliates-modal.html',
+  "<div class=\"modal-header\">\n" +
+      "<h3 class=\"modal-title\">Búsqueda de afiliados</h3>\n" +
+  "</div>\n" +
+  "<div class=\"modal-body\">\n" +
+
+  "</div>\n" +
+  "<div class=\"modal-footer\">\n" +
+      "<button class=\"btn btn-primary\">Aceptar</button>\n" +
+      "<button class=\"btn btn-warning\">Cancelar</button>\n" +
+  "</div>\n"
+);
+
 
   $templateCache.put('templates/tile-simple.html',
     "<a class=\"info-tiles tiles-{{item.color}}\" ng-href=\"{{item.href}}\">\n" +

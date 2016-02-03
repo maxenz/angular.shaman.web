@@ -1,21 +1,24 @@
 (function() {
 
   angular
-  .module('theme.core.reception_controller',[])
+  .module('theme.core.reception_controller', ['ngGrid'])
   .controller('receptionController', receptionController);
 
   receptionController.$inject = ['$filter', '$theme', 'MobileService',
-  'IncidentService', 'UtilsService', '$modal', '$bootbox', 'SettingsService', 'ClientsService', 'toastr'];
+  'IncidentService', 'UtilsService', '$modal', '$bootbox', 'SettingsService', 'ClientsService', 'toastr',
+  '$scope'];
 
   function receptionController($filter, $theme, MobileService, IncidentService, UtilsService, $modal, $bootbox,
-    SettingsService, ClientsService, toastr) {
+    SettingsService, ClientsService, toastr, $scope) {
       'use strict';
 
       var vm = this;
 
+      vm.items = ['item1', 'item2', 'item3'];
       vm.sexOptions = [ {id: 1, label: 'M'}, {id: 2, label: 'F'}];
       vm.operativeGradeOptions = [];
       vm.plansOptions = [];
+
       SettingsService.settings.operativeGrades.forEach(function(grade){
         vm.operativeGradeOptions.push({id: grade.id, label: grade.descripcion});
       });
@@ -33,6 +36,8 @@
       vm.validateClient    = validateClient;
       vm.validateAffiliate = validateAffiliate;
       vm.validateLocality  = validateLocality;
+      vm.affiliateKeyPress = affiliateKeyPress;
+
 
 
       vm.datepicker = {};
@@ -43,13 +48,19 @@
         startingDay: 1
       };
 
+      function affiliateKeyPress(keyCode) {
+        if (keyCode === 113) {
+          showAffiliateSearchModal();
+        }
+      }
+
       function createIncident() {
         resetIncident();
         vm.incident.inputBlocked = false;
       }
 
       function saveIncident() {
-        console.log('puto');
+        //console.log('puto');
       }
 
       function cancelIncident() {
@@ -125,12 +136,12 @@
       function validateLocality() {
         if (vm.incident.locAbreviature) {
           IncidentService.validateLocality(vm.incident.locAbreviature)
-            .then(function(response) {
-              var locality = UtilsService.toCamel(response.data);
-              setLocality(locality);
-            }, function(error) {
-              console.log(error);
-            })
+          .then(function(response) {
+            var locality = UtilsService.toCamel(response.data);
+            setLocality(locality);
+          }, function(error) {
+            console.log(error);
+          })
         }
       }
 
@@ -162,7 +173,7 @@
 
       function setLocality(locality) {
         vm.incident.partido = locality.partido.descripcion +
-         ' (' + locality.province.abreviaturaId + '-' + locality.geographicZone.descripcion + ')';
+        ' (' + locality.province.abreviaturaId + '-' + locality.geographicZone.descripcion + ')';
         vm.incident.locality = locality.descripcion;
 
       }
@@ -174,5 +185,61 @@
         vm.datepicker.opened = true;
       }
 
-    }
-  })();
+      // private functions
+
+      function showAffiliateSearchModal() {
+        if (vm.incident.client) {
+
+          $modal.open({
+            templateUrl: 'clients-search-modal.html',
+            controller: function($scope, $modalInstance) {
+
+              $scope.modalClientsSearch = {};
+              $scope.modalClientsSearch.clientsAreLoading = true;
+              $scope.modalClientsSearch.data = [];
+              // --> Comienza F2 en affiliates
+              $scope.modalClientsSearch.gridOptions =  {
+                data: 'modalClientsSearch.data',
+                multiSelect : false,
+                showFilter : true,
+                columnDefs: [
+                  { displayName: 'Cliente', field: 'Cliente' },
+                  { displayName: 'Nro. Afiliado', field: 'NroAfiliado' },
+                  { displayName: 'Tipo', field: 'TipoIntegrante' },
+                  { displayName: 'Apellido', field: 'Apellido' },
+                  { displayName: 'Nombre', field: 'Nombre' },
+                  { displayName: 'Documento', field: 'Documento' }]
+                };
+
+                ClientsService.getClientMembersByClient(vm.incident.client)
+                .then(function(response){
+
+                  $scope.modalClientsSearch.data = response.data;
+                  $scope.modalClientsSearch.gridOptions.enableFiltering = true,
+                  $scope.modalClientsSearch.clientsAreLoading = false;
+
+                }, function(error){
+                  $scope.modalClientsSearch.clientsAreLoading = false;
+                  console.log(error);
+                })
+
+                // --> Termina F2 en affiliates
+
+                $scope.ok = function() {
+                  $modalInstance.close();
+                };
+
+                $scope.cancel = function() {
+                  $modalInstance.dismiss('cancel');
+                };
+              },
+              size: 'lg'
+            });
+
+          }
+        }
+
+
+
+      }
+    })();

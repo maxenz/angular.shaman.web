@@ -59,7 +59,8 @@
     "bootstrap-datepaginator": "~1.1.0",
     "velocity": "~1.2.2",
     "angular-google-maps": "~2.2.1",
-    "angular-toastr": "~1.6.0"
+    "angular-toastr": "~1.6.0",
+    "angular-modal-service": "~0.6.9"
   },
   "resolutions": {
     "jquery": "~1.11.0",

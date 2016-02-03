@@ -23,10 +23,15 @@
        '&affiliateNumber=' + affiliateNumber);
     }
 
+    function getClientMembersByClient(client) {
+      return $http.get(shamanConfiguration.url + 'api/clients/GetMembersByClient?client=' + client);
+    }
+
     var service = {
       getClientWithValidation    : getClientWithValidation,
       getPlansByClient           : getPlansByClient,
-      getAffiliateWithValidation : getAffiliateWithValidation
+      getAffiliateWithValidation : getAffiliateWithValidation,
+      getClientMembersByClient   : getClientMembersByClient
 
     };
 

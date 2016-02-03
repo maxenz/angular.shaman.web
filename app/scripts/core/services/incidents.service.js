@@ -23,9 +23,9 @@
     }
 
     var service = {
-      getAll           : getAll,
-      getByPhone       : getByPhone,
-      validateLocality : validateLocality
+      getAll              : getAll,
+      getByPhone          : getByPhone,
+      validateLocality    : validateLocality
     };
 
     return service;
