@@ -1,2 +1,2 @@
 angular
-  .module('theme.core.directives', []);
+  .module('theme.core.directives', [])

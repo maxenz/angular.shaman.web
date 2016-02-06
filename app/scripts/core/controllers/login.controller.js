@@ -25,11 +25,8 @@
       AuthenticationService.login($scope.data.username, $scope.data.password)
       .then(function(data){
         AuthenticationService.setCredentials($scope.data.username, $scope.data.password);
-        SettingsService.setInitialSettings()
-        .then(function(response){
-          SettingsService.settings.operativeGrades = UtilsService.toCamel(response.operativeGrades.data);
-          $location.path('/');
-        });
+        $location.path('/');
+
 
       }, function(error){
         switch (error.status) {

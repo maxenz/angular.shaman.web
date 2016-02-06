@@ -20,7 +20,7 @@
       vm.plansOptions = [];
 
       SettingsService.settings.operativeGrades.forEach(function(grade){
-        vm.operativeGradeOptions.push({id: grade.id, label: grade.descripcion});
+        vm.operativeGradeOptions.push({id: grade.id, label: grade.descripcion, backgroundColor: grade.colorHexa});
       });
       vm.sexSelected = vm.sexOptions[0];
       vm.operativeGradeSelected = vm.operativeGradeOptions[0];
@@ -104,6 +104,7 @@
 
             ClientsService.getPlansByClient(client.id)
             .then(function(response){
+              vm.plansOptions = [];
               var plans = UtilsService.toCamel(response.data);
               plans.forEach(function(plan){
                 vm.plansOptions.push({id: plan.id, label: plan.descripcion});
@@ -123,8 +124,6 @@
           ClientsService.getAffiliateWithValidation(vm.incident.client, vm.incident.affiliateNumber)
           .then(function(response) {
             var data = UtilsService.toCamel(response.data);
-            console.log('data de afiiliate');
-            console.log(data);
             setIncident(data);
           }, function(error){
             console.log(error);
@@ -152,22 +151,24 @@
       }
 
       function setIncident(incident) {
-        vm.incident.age = incident.edad;
-        vm.incident.afiliateNumber = incident.nroAfiliado;
-        vm.incident.client = incident.abreviaturaId;
-        vm.incident.advertise = incident.aviso;
-        vm.incident.patient = incident.paciente;
-        vm.incident.phoneNumber = incident.telefono;
-        vm.incident.locAbreviature = incident.localidad;
-        vm.incident.locality = incident.localidadDescripcion;
-        vm.incident.partido = incident.partido;
-        vm.incident.domicile.street = incident.calle;
-        vm.incident.domicile.height = incident.altura;
-        vm.incident.domicile.floor = incident.piso;
-        vm.incident.domicile.department = incident.departamento;
-        vm.incident.domicile.betweenFirstStreet = incident.entreCalle1;
-        vm.incident.domicile.betweenSecondStreet = incident.entreCalle2;
-        vm.sexSelected = UtilsService.getObjectByPropertyInArray(vm.sexOptions, 'label', incident.sexo);
+
+        vm.incident.age                          = incident.edad;
+        vm.incident.afiliateNumber               = incident.nroAfiliado;
+        vm.incident.client                       = incident.abreviaturaId;
+        vm.incident.advertise                    = incident.aviso;
+        vm.incident.patient                      = incident.paciente;
+        vm.incident.phoneNumber                  = incident.telefono;
+        vm.incident.locAbreviature               = incident.localidad.abreviaturaId;
+        vm.incident.locality                     = incident.localidad.descripcion;
+        vm.incident.partido                      = incident.localidad.partido.descripcion;
+        vm.incident.domicile.street              = incident.domicilio.street;
+        vm.incident.domicile.height              = incident.domicilio.height;
+        vm.incident.domicile.floor               = incident.domicilio.floor;
+        vm.incident.domicile.department          = incident.domicilio.department;
+        vm.incident.domicile.betweenFirstStreet  = incident.domicilio.betweenStreet1;
+        vm.incident.domicile.betweenSecondStreet = incident.domicilio.betweenStreet2;
+        vm.sexSelected                           = UtilsService.getObjectByPropertyInArray(vm.sexOptions, 'label', incident.sexo);
+        vm.operativeGradeSelected                = UtilsService.getObjectByPropertyInArray(vm.operativeGradeOptions, 'label', incident.gradoOperativo.descripcion);
 
       }
 
@@ -194,16 +195,18 @@
             templateUrl: 'clients-search-modal.html',
             controller: function($scope, $modalInstance) {
 
-              $scope.modalClientsSearch = {};
+              $scope.modalClientsSearch                   = {};
               $scope.modalClientsSearch.clientsAreLoading = true;
-              $scope.modalClientsSearch.data = [];
+              $scope.modalClientsSearch.selectedItems     = [];
+              $scope.modalClientsSearch.data              = [];
               // --> Comienza F2 en affiliates
               $scope.modalClientsSearch.gridOptions =  {
                 data: 'modalClientsSearch.data',
                 multiSelect : false,
                 showFilter : true,
+                selectedItems : $scope.modalClientsSearch.selectedItems,
                 columnDefs: [
-                  { displayName: 'Cliente', field: 'Cliente' },
+                  { displayName: 'Cliente', field: 'AbreviaturaId' },
                   { displayName: 'Nro. Afiliado', field: 'NroAfiliado' },
                   { displayName: 'Tipo', field: 'TipoIntegrante' },
                   { displayName: 'Apellido', field: 'Apellido' },
@@ -226,6 +229,14 @@
                 // --> Termina F2 en affiliates
 
                 $scope.ok = function() {
+                  console.log($scope.modalClientsSearch.selectedItems[0]);
+                  if ($scope.modalClientsSearch.selectedItems.length === 0) {
+                    toastr.warning('Debe seleccionar al menos un cliente');
+                    return;
+                  }
+
+                  vm.incident.affiliateNumber = $scope.modalClientsSearch.selectedItems[0].NroAfiliado;
+                  validateAffiliate();
                   $modalInstance.close();
                 };
 
@@ -237,9 +248,6 @@
             });
 
           }
-        }
-
-
-
+        }      
       }
     })();

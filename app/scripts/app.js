@@ -32,10 +32,18 @@ angular
     redirectTo: '/login'
   });
 }])
-.run(['$rootScope', '$location', '$cookieStore', '$http',
-function($rootScope, $location, $cookieStore, $http){
+.run(['$rootScope', '$location', '$cookieStore', '$http','SettingsService', 'UtilsService',
+function($rootScope, $location, $cookieStore, $http, SettingsService, UtilsService){
   'use strict';
- $http.defaults.headers.post['Content-Type'] = 'application/json';
+
+  SettingsService.setInitialSettings()
+  .then(function(response){
+    console.log(response);
+    SettingsService.settings.operativeGrades = UtilsService.toCamel(response.operativeGrades.data);
+    SettingsService.settings.ivaSituations   = UtilsService.toCamel(response.ivaSituations.data);
+  });
+
+  $http.defaults.headers.post['Content-Type'] = 'application/json';
 
   $rootScope.globals = $cookieStore.get('globals') || {};
   if ($rootScope.globals.currentUser) {
