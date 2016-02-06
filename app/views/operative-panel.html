@@ -232,10 +232,7 @@
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">IVA</label>
-                  <select class="form-control" id="source4" ng-disabled="receptionCtrl.incident.inputBlocked">
-                    <option value="1">Grado1</option>
-                    <option value="2">Grado2</option>
-                  </select>
+                  <select class="form-control" id="receptionCtrl.selIvaSituations" ng-disabled="receptionCtrl.incident.inputBlocked" ng-options="item as item.label for item in receptionCtrl.ivaSituationsOptions track by item.id" ng-model="receptionCtrl.ivaSituationSelected"></select>
                 </div>
               </div>
               <div class="col-xs-2">

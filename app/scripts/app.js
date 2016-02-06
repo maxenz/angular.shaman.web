@@ -38,22 +38,25 @@ function($rootScope, $location, $cookieStore, $http, SettingsService, UtilsServi
 
   SettingsService.setInitialSettings()
   .then(function(response){
-    console.log(response);
+
     SettingsService.settings.operativeGrades = UtilsService.toCamel(response.operativeGrades.data);
     SettingsService.settings.ivaSituations   = UtilsService.toCamel(response.ivaSituations.data);
-  });
 
-  $http.defaults.headers.post['Content-Type'] = 'application/json';
+    $http.defaults.headers.post['Content-Type'] = 'application/json';
 
-  $rootScope.globals = $cookieStore.get('globals') || {};
-  if ($rootScope.globals.currentUser) {
-    $http.defaults.headers.common['Authorization'] = 'Basic' + $rootScope.globals.currentUser.authdata;
-  }
-
-  $rootScope.$on('$locationChangeStart', function(event, next, current){
-    if ($location.path() !== '/login' && !$rootScope.globals.currentUser) {
-      $location.path('/login');
+    $rootScope.globals = $cookieStore.get('globals') || {};
+    if ($rootScope.globals.currentUser) {
+      $http.defaults.headers.common['Authorization'] = 'Basic' + $rootScope.globals.currentUser.authdata;
     }
+
+    $rootScope.$on('$locationChangeStart', function(event, next, current){
+      if ($location.path() !== '/login' && !$rootScope.globals.currentUser) {
+        $location.path('/login');
+      }
+    });
+
   });
+
+
 
 }]);

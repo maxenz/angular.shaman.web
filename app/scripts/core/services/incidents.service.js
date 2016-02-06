@@ -11,7 +11,7 @@
   function IncidentService($http, $rootScope, shamanConfiguration) {
 
     function getAll() {
-      return $http.get(shamanConfiguration.url + 'api/incidents');
+      return $http.get(shamanConfiguration.url + 'api/incidents/GetAll');
     }
 
     function getByPhone(phone) {
@@ -22,10 +22,15 @@
       return $http.get(shamanConfiguration.url + 'api/localities/GetLocalityByAbreviaturaId?locAbreviaturaId=' + locality);
     }
 
+    function getNewIncidentNumberToCreate() {
+      return $http.get(shamanConfiguration.url + 'api/incidents/GetNewIncidentNumberToCreate');
+    }
+
     var service = {
-      getAll              : getAll,
-      getByPhone          : getByPhone,
-      validateLocality    : validateLocality
+      getAll                       : getAll,
+      getByPhone                   : getByPhone,
+      validateLocality             : validateLocality,
+      getNewIncidentNumberToCreate : getNewIncidentNumberToCreate
     };
 
     return service;

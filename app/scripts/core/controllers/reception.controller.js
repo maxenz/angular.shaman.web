@@ -12,19 +12,23 @@
     SettingsService, ClientsService, toastr, $scope) {
       'use strict';
 
-      var vm = this;
-
-      vm.items = ['item1', 'item2', 'item3'];
-      vm.sexOptions = [ {id: 1, label: 'M'}, {id: 2, label: 'F'}];
+      var vm                   = this;
+      vm.sexOptions            = [ {id: 1, label: 'M'}, {id: 2, label: 'F'}];
       vm.operativeGradeOptions = [];
-      vm.plansOptions = [];
+      vm.plansOptions          = [];
+      vm.ivaSituationsOptions  = [];
 
       SettingsService.settings.operativeGrades.forEach(function(grade){
-        vm.operativeGradeOptions.push({id: grade.id, label: grade.descripcion, backgroundColor: grade.colorHexa});
+        vm.operativeGradeOptions.push({id: grade.id, label: grade.descripcion});
       });
-      vm.sexSelected = vm.sexOptions[0];
-      vm.operativeGradeSelected = vm.operativeGradeOptions[0];
 
+      SettingsService.settings.ivaSituations.forEach(function(situation){
+        vm.ivaSituationsOptions.push({id: situation.id, label: situation.abreviaturaId});
+      });
+
+      vm.sexSelected            = vm.sexOptions[0];
+      vm.operativeGradeSelected = vm.operativeGradeOptions[0];
+      vm.ivaSituationsSelected  = vm.ivaSituationsOptions[0];
 
       vm.incident = {};
       vm.incident.inputBlocked = true;
@@ -38,11 +42,9 @@
       vm.validateLocality  = validateLocality;
       vm.affiliateKeyPress = affiliateKeyPress;
 
-
-
-      vm.datepicker = {};
-      vm.datepicker.format = 'dd/MM/yyyy';
-      vm.datepicker.open = openDatepicker;
+      vm.datepicker             = {};
+      vm.datepicker.format      = 'dd/MM/yyyy';
+      vm.datepicker.open        = openDatepicker;
       vm.datepicker.dateOptions = {
         formatYear: 'yy',
         startingDay: 1
@@ -55,8 +57,16 @@
       }
 
       function createIncident() {
-        resetIncident();
-        vm.incident.inputBlocked = false;
+        IncidentService.getNewIncidentNumberToCreate()
+          .then(function(response){
+            resetIncident();
+            console.log(response);
+            vm.incident.number = response.data;
+            vm.incident.inputBlocked = false;
+          }, function(error){
+            console.log(error);
+          });
+
       }
 
       function saveIncident() {
@@ -169,7 +179,7 @@
         vm.incident.domicile.betweenSecondStreet = incident.domicilio.betweenStreet2;
         vm.sexSelected                           = UtilsService.getObjectByPropertyInArray(vm.sexOptions, 'label', incident.sexo);
         vm.operativeGradeSelected                = UtilsService.getObjectByPropertyInArray(vm.operativeGradeOptions, 'label', incident.gradoOperativo.descripcion);
-
+        vm.ivaSituationSelected                  = UtilsService.getObjectByPropertyInArray(vm.ivaSituationsOptions, 'id', incident.situacionIvaId );
       }
 
       function setLocality(locality) {
@@ -248,6 +258,6 @@
             });
 
           }
-        }      
+        }
       }
     })();
