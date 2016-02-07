@@ -41,6 +41,7 @@
       vm.validateAffiliate = validateAffiliate;
       vm.validateLocality  = validateLocality;
       vm.affiliateKeyPress = affiliateKeyPress;
+      vm.symptomsKeyPress  = symptomsKeyPress;
 
       vm.datepicker             = {};
       vm.datepicker.format      = 'dd/MM/yyyy';
@@ -56,16 +57,22 @@
         }
       }
 
+      function symptomsKeyPress(keyCode) {
+        if (keyCode === 113) {
+          showSymptomsSearchModal();
+        }
+      }
+
       function createIncident() {
         IncidentService.getNewIncidentNumberToCreate()
-          .then(function(response){
-            resetIncident();
-            console.log(response);
-            vm.incident.number = response.data;
-            vm.incident.inputBlocked = false;
-          }, function(error){
-            console.log(error);
-          });
+        .then(function(response){
+          resetIncident();
+          console.log(response);
+          vm.incident.number = response.data;
+          vm.incident.inputBlocked = false;
+        }, function(error){
+          console.log(error);
+        });
 
       }
 
@@ -228,7 +235,7 @@
                 .then(function(response){
 
                   $scope.modalClientsSearch.data = response.data;
-                  $scope.modalClientsSearch.gridOptions.enableFiltering = true,
+                  $scope.modalClientsSearch.gridOptions.enableFiltering = true;
                   $scope.modalClientsSearch.clientsAreLoading = false;
 
                 }, function(error){
@@ -259,5 +266,46 @@
 
           }
         }
-      }
-    })();
+
+        // --> Popup busqueda de sintomas
+        function showSymptomsSearchModal() {
+          $modal.open({
+            templateUrl: 'symptoms-search-modal.html',
+            controller: function($scope, $modalInstance) {
+
+              $scope.modalSymptomsSearch                             = {};
+              $scope.modalSymptomsSearch.selectedItems               = [];
+              $scope.modalSymptomsSearch.data                        = SettingsService.settings.symptoms;
+
+              $scope.modalSymptomsSearch.gridOptions =  {
+                data: 'modalSymptomsSearch.data',
+                multiSelect : false,
+                enableFiltering: true,
+                showFilter : true,
+                selectedItems : $scope.modalSymptomsSearch.selectedItems,
+                columnDefs: [
+                  { displayName: 'Descripción', field: 'descripcion' }]
+                };
+
+                // --> Termina F2 en affiliates
+
+                $scope.ok = function() {
+                  if ($scope.modalSymptomsSearch.selectedItems.length === 0) {
+                    toastr.warning('Debe seleccionar al menos un síntoma');
+                    return;
+                  }
+
+                  vm.incident.symptoms = $scope.modalSymptomsSearch.selectedItems[0].descripcion;
+                  $modalInstance.close();
+                };
+
+                $scope.cancel = function() {
+                  $modalInstance.dismiss('cancel');
+                };
+              },
+              size: 'lg'
+            });
+
+          }
+        }
+      })();

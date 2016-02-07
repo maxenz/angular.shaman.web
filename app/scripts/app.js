@@ -41,6 +41,7 @@ function($rootScope, $location, $cookieStore, $http, SettingsService, UtilsServi
 
     SettingsService.settings.operativeGrades = UtilsService.toCamel(response.operativeGrades.data);
     SettingsService.settings.ivaSituations   = UtilsService.toCamel(response.ivaSituations.data);
+    SettingsService.settings.symptoms        = UtilsService.toCamel(response.symptoms.data);
 
     $http.defaults.headers.post['Content-Type'] = 'application/json';
 

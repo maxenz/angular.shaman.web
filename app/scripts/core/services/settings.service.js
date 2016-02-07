@@ -11,10 +11,11 @@
   function SettingsService($http, $rootScope, shamanConfiguration, UtilsService, $q) {
 
     function getInitialInformation() {
-      
+
       var promises = {
         operativeGrades   : UtilsService.getPromise('api/operativeGrades'),
-        ivaSituations     : UtilsService.getPromise('api/iva/GetSituations')
+        ivaSituations     : UtilsService.getPromise('api/iva/GetSituations'),
+        symptoms          : UtilsService.getPromise('api/symptoms')
       };
 
       var deferred = $q.defer();
