@@ -14,8 +14,8 @@
       return UtilsService.getPromise('api/clients/GetClientWithValidation?client=' + client);
     }
 
-    function getPlansByClient(id) {
-      return UtilsService.getPromise('api/clients/GetPlans?clientId=' + id);
+    function getPlansByClient(client) {
+      return UtilsService.getPromise('api/clients/GetPlans?client=' + client);
     }
 
     function getAffiliateWithValidation(clientAbreviaturaId, affiliateNumber) {
@@ -27,11 +27,21 @@
       return $http.get(shamanConfiguration.url + 'api/clients/GetMembersByClient?client=' + client);
     }
 
+    function setPlans(plans) {
+      service.planOptions = [];
+      var data = UtilsService.toCamel(plans);
+      data.forEach(function(plan){
+        service.planOptions.push({id: plan.id, label: plan.descripcion});
+      });
+    }
+
     var service = {
       getClientWithValidation    : getClientWithValidation,
       getPlansByClient           : getPlansByClient,
       getAffiliateWithValidation : getAffiliateWithValidation,
-      getClientMembersByClient   : getClientMembersByClient
+      getClientMembersByClient   : getClientMembersByClient,
+      setPlans                   : setPlans,
+      planOptions                : []
 
     };
 

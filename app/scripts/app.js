@@ -39,9 +39,9 @@ function($rootScope, $location, $cookieStore, $http, SettingsService, UtilsServi
   SettingsService.setInitialSettings()
   .then(function(response){
 
-    SettingsService.settings.operativeGrades = UtilsService.toCamel(response.operativeGrades.data);
-    SettingsService.settings.ivaSituations   = UtilsService.toCamel(response.ivaSituations.data);
-    SettingsService.settings.symptoms        = UtilsService.toCamel(response.symptoms.data);
+    SettingsService.setOperativeGrades(UtilsService.toCamel(response.operativeGrades.data));
+    SettingsService.setIvaSituations(UtilsService.toCamel(response.ivaSituations.data));
+    SettingsService.setSymptoms(UtilsService.toCamel(response.symptoms.data));
 
     $http.defaults.headers.post['Content-Type'] = 'application/json';
 

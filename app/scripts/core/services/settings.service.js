@@ -37,11 +37,34 @@
 
     }
 
+    function setOperativeGrades(operativeGrades) {
+      operativeGrades.forEach(function(grade){
+        service.operativeGradeOptions.push({id: grade.id, label: grade.descripcion});
+      });
+    }
+
+    function setIvaSituations(ivaSituations) {
+      ivaSituations.forEach(function(situation){
+        service.ivaSituationsOptions.push({id: situation.id, label: situation.abreviaturaId});
+      });
+    }
+
+    function setSymptoms(symptoms) {
+      service.symptoms = symptoms;
+    }
+
     var service = {
-      setInitialSettings : setInitialSettings
+      setInitialSettings : setInitialSettings,
+      setOperativeGrades : setOperativeGrades,
+      setIvaSituations   : setIvaSituations,
+      setSymptoms        : setSymptoms
     };
 
-    service.settings = {};
+    service.data                  = {};
+    service.operativeGradeOptions = [];
+    service.ivaSituationsOptions  = [];
+    service.sexOptions            = [ {id: 1, label: 'M'}, {id: 2, label: 'F'}];
+    service.symptoms              = [];
 
     return service;
 

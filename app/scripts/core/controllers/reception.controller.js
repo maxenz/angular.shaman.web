@@ -1,47 +1,41 @@
 (function() {
 
   angular
-  .module('theme.core.reception_controller', ['ngGrid'])
+  .module('theme.core.reception_controller', [])
   .controller('receptionController', receptionController);
 
   receptionController.$inject = ['$filter', '$theme', 'MobileService',
-  'IncidentService', 'UtilsService', '$modal', '$bootbox', 'SettingsService', 'ClientsService', 'toastr',
-  '$scope'];
+  'IncidentService', 'UtilsService', '$modal', '$bootbox', 'SettingsService', 'ClientsService', 'toastr'];
 
   function receptionController($filter, $theme, MobileService, IncidentService, UtilsService, $modal, $bootbox,
-    SettingsService, ClientsService, toastr, $scope) {
+    SettingsService, ClientsService, toastr) {
       'use strict';
 
       var vm                   = this;
-      vm.sexOptions            = [ {id: 1, label: 'M'}, {id: 2, label: 'F'}];
-      vm.operativeGradeOptions = [];
-      vm.plansOptions          = [];
-      vm.ivaSituationsOptions  = [];
+      vm.sexOptions            = SettingsService.sexOptions;
+      vm.operativeGradeOptions = SettingsService.operativeGradeOptions;
+      vm.ivaSituationsOptions  = SettingsService.ivaSituationsOptions;
 
-      SettingsService.settings.operativeGrades.forEach(function(grade){
-        vm.operativeGradeOptions.push({id: grade.id, label: grade.descripcion});
-      });
+      vm.incService = IncidentService;
+      vm.cliService = ClientsService;
+      console.log(vm.incService.incident);
 
-      SettingsService.settings.ivaSituations.forEach(function(situation){
-        vm.ivaSituationsOptions.push({id: situation.id, label: situation.abreviaturaId});
-      });
+      vm.incService.incident.sexSelected            = vm.sexOptions[0];
+      vm.incService.incident.operativeGradeSelected = vm.operativeGradeOptions[0];
+      vm.incService.incident.ivaSituationsSelected  = vm.ivaSituationsOptions[0];
 
-      vm.sexSelected            = vm.sexOptions[0];
-      vm.operativeGradeSelected = vm.operativeGradeOptions[0];
-      vm.ivaSituationsSelected  = vm.ivaSituationsOptions[0];
+      vm.incService.incident.inputBlocked = true;
 
-      vm.incident = {};
-      vm.incident.inputBlocked = true;
-
-      vm.saveIncident      = saveIncident;
-      vm.cancelIncident    = cancelIncident;
-      vm.createIncident    = createIncident;
-      vm.getDataByPhone    = getDataByPhone;
-      vm.validateClient    = validateClient;
-      vm.validateAffiliate = validateAffiliate;
-      vm.validateLocality  = validateLocality;
-      vm.affiliateKeyPress = affiliateKeyPress;
-      vm.symptomsKeyPress  = symptomsKeyPress;
+      vm.saveIncident       = saveIncident;
+      vm.cancelIncident     = cancelIncident;
+      vm.createIncident     = createIncident;
+      vm.inactivateIncident = inactivateIncident;
+      vm.getDataByPhone     = getDataByPhone;
+      vm.validateClient     = validateClient;
+      vm.validateAffiliate  = validateAffiliate;
+      vm.validateLocality   = validateLocality;
+      vm.affiliateKeyPress  = affiliateKeyPress;
+      vm.symptomsKeyPress   = symptomsKeyPress;
 
       vm.datepicker             = {};
       vm.datepicker.format      = 'dd/MM/yyyy';
@@ -68,8 +62,8 @@
         .then(function(response){
           resetIncident();
           console.log(response);
-          vm.incident.number = response.data;
-          vm.incident.inputBlocked = false;
+          vm.incService.incident.number = response.data;
+          vm.incService.incident.inputBlocked = false;
         }, function(error){
           console.log(error);
         });
@@ -84,9 +78,14 @@
 
       }
 
+      function inactivateIncident() {
+        resetIncident();
+        vm.incService.incident.inputBlocked = true;
+      }
+
       function getDataByPhone() {
-        if (vm.incident.phoneNumber) {
-          IncidentService.getByPhone(vm.incident.phoneNumber)
+        if (vm.incService.incident.phoneNumber) {
+          IncidentService.getByPhone(vm.incService.incident.phoneNumber)
           .then(function(response){
             var data = UtilsService.toCamel(response.data);
             console.log('data de phone');
@@ -94,7 +93,7 @@
             if (data.paciente) {
               $bootbox.confirm('¿El paciente es ' + data.paciente + '?', function(result) {
                 if (result) {
-                  setIncident(data);
+                  IncidentService.setIncident(data);
                 }
               });
             }
@@ -107,8 +106,8 @@
       }
 
       function validateClient() {
-        if (vm.incident.client) {
-          ClientsService.getClientWithValidation(vm.incident.client)
+        if (vm.incService.incident.client) {
+          ClientsService.getClientWithValidation(vm.incService.incident.client)
           .then(function(response){
             console.log(response.data);
             var client = UtilsService.toCamel(response.data);
@@ -119,13 +118,9 @@
               toastr.warning(client.estadoMorosidad);
             }
 
-            ClientsService.getPlansByClient(client.id)
+            ClientsService.getPlansByClient(client.abreviaturaId)
             .then(function(response){
-              vm.plansOptions = [];
-              var plans = UtilsService.toCamel(response.data);
-              plans.forEach(function(plan){
-                vm.plansOptions.push({id: plan.id, label: plan.descripcion});
-              });
+              ClientsService.setPlans(response.data);
             }, function(error){
               console.log(error);
             });
@@ -137,11 +132,11 @@
       }
 
       function validateAffiliate() {
-        if (vm.incident.client && vm.incident.affiliateNumber) {
-          ClientsService.getAffiliateWithValidation(vm.incident.client, vm.incident.affiliateNumber)
+        if (vm.incService.incident.client && vm.incService.incident.affiliateNumber) {
+          ClientsService.getAffiliateWithValidation(vm.incService.incident.client, vm.incService.incident.affiliateNumber)
           .then(function(response) {
             var data = UtilsService.toCamel(response.data);
-            setIncident(data);
+            IncidentService.setIncident(data);
           }, function(error){
             console.log(error);
           });
@@ -150,8 +145,8 @@
       }
 
       function validateLocality() {
-        if (vm.incident.locAbreviature) {
-          IncidentService.validateLocality(vm.incident.locAbreviature)
+        if (vm.incService.incident.locAbreviature) {
+          IncidentService.validateLocality(vm.incService.incident.locAbreviature)
           .then(function(response) {
             var locality = UtilsService.toCamel(response.data);
             setLocality(locality);
@@ -162,37 +157,36 @@
       }
 
       function resetIncident() {
-        vm.incident = {};
-        vm.incident.domicile = {};
-        vm.incident.incDate = moment().format("DD/MM/YYYY");
+        vm.incService.incident = {};
+        vm.incService.incident.domicile = {};
+        vm.incService.incident.incDate = moment().format("DD/MM/YYYY");
       }
 
-      function setIncident(incident) {
-
-        vm.incident.age                          = incident.edad;
-        vm.incident.afiliateNumber               = incident.nroAfiliado;
-        vm.incident.client                       = incident.abreviaturaId;
-        vm.incident.advertise                    = incident.aviso;
-        vm.incident.patient                      = incident.paciente;
-        vm.incident.phoneNumber                  = incident.telefono;
-        vm.incident.locAbreviature               = incident.localidad.abreviaturaId;
-        vm.incident.locality                     = incident.localidad.descripcion;
-        vm.incident.partido                      = incident.localidad.partido.descripcion;
-        vm.incident.domicile.street              = incident.domicilio.street;
-        vm.incident.domicile.height              = incident.domicilio.height;
-        vm.incident.domicile.floor               = incident.domicilio.floor;
-        vm.incident.domicile.department          = incident.domicilio.department;
-        vm.incident.domicile.betweenFirstStreet  = incident.domicilio.betweenStreet1;
-        vm.incident.domicile.betweenSecondStreet = incident.domicilio.betweenStreet2;
-        vm.sexSelected                           = UtilsService.getObjectByPropertyInArray(vm.sexOptions, 'label', incident.sexo);
-        vm.operativeGradeSelected                = UtilsService.getObjectByPropertyInArray(vm.operativeGradeOptions, 'label', incident.gradoOperativo.descripcion);
-        vm.ivaSituationSelected                  = UtilsService.getObjectByPropertyInArray(vm.ivaSituationsOptions, 'id', incident.situacionIvaId );
-      }
+      // function setIncident(incident) {
+      //   vm.incService.incident.age                          = incident.edad;
+      //   vm.incService.incident.afiliateNumber               = incident.nroAfiliado;
+      //   vm.incService.incident.client                       = incident.abreviaturaId;
+      //   vm.incService.incident.advertise                    = incident.aviso;
+      //   vm.incService.incident.patient                      = incident.paciente;
+      //   vm.incService.incident.phoneNumber                  = incident.telefono;
+      //   vm.incService.incident.locAbreviature               = incident.localidad.abreviaturaId;
+      //   vm.incService.incident.locality                     = incident.localidad.descripcion;
+      //   vm.incService.incident.partido                      = incident.localidad.partido.descripcion;
+      //   vm.incService.incident.domicile.street              = incident.domicilio.street;
+      //   vm.incService.incident.domicile.height              = incident.domicilio.height;
+      //   vm.incService.incident.domicile.floor               = incident.domicilio.floor;
+      //   vm.incService.incident.domicile.department          = incident.domicilio.department;
+      //   vm.incService.incident.domicile.betweenFirstStreet  = incident.domicilio.betweenStreet1;
+      //   vm.incService.incident.domicile.betweenSecondStreet = incident.domicilio.betweenStreet2;
+      //   vm.sexSelected                           = UtilsService.getObjectByPropertyInArray(vm.sexOptions, 'label', incident.sexo);
+      //   vm.operativeGradeSelected                = UtilsService.getObjectByPropertyInArray(vm.operativeGradeOptions, 'label', incident.gradoOperativo.descripcion);
+      //   vm.ivaSituationSelected                  = UtilsService.getObjectByPropertyInArray(vm.ivaSituationsOptions, 'id', incident.situacionIvaId );
+      // }
 
       function setLocality(locality) {
-        vm.incident.partido = locality.partido.descripcion +
+        vm.incService.incident.partido = locality.partido.descripcion +
         ' (' + locality.province.abreviaturaId + '-' + locality.geographicZone.descripcion + ')';
-        vm.incident.locality = locality.descripcion;
+        vm.incService.incident.locality = locality.descripcion;
 
       }
 
@@ -206,7 +200,7 @@
       // private functions
 
       function showAffiliateSearchModal() {
-        if (vm.incident.client) {
+        if (vm.incService.incident.client) {
 
           $modal.open({
             templateUrl: 'clients-search-modal.html',
@@ -214,24 +208,37 @@
 
               $scope.modalClientsSearch                   = {};
               $scope.modalClientsSearch.clientsAreLoading = true;
-              $scope.modalClientsSearch.selectedItems     = [];
+              $scope.modalClientsSearch.selectedRow       = null;
               $scope.modalClientsSearch.data              = [];
               // --> Comienza F2 en affiliates
               $scope.modalClientsSearch.gridOptions =  {
                 data: 'modalClientsSearch.data',
-                multiSelect : false,
-                showFilter : true,
-                selectedItems : $scope.modalClientsSearch.selectedItems,
                 columnDefs: [
                   { displayName: 'Cliente', field: 'AbreviaturaId' },
                   { displayName: 'Nro. Afiliado', field: 'NroAfiliado' },
                   { displayName: 'Tipo', field: 'TipoIntegrante' },
                   { displayName: 'Apellido', field: 'Apellido' },
                   { displayName: 'Nombre', field: 'Nombre' },
-                  { displayName: 'Documento', field: 'Documento' }]
+                  { displayName: 'Documento', field: 'Documento' }],
+                  enableRowSelection: true,
+                  enableRowHeaderSelection: false,
+                  multiSelect: false,
+                  modifierKeysToMultiSelect : true,
+                  noUnselect: true,
+                  showFooter: false,
+                  enableFiltering: true,
+                  showFilter: true,
+                  enableGridMenu : true,
+                  onRegisterApi : function(gridApi) {
+                    $scope.gridApi = gridApi;
+
+                    $scope.gridApi.selection.on.rowSelectionChanged($scope, function(row){
+                      $scope.modalClientsSearch.selectedRow = row;
+                    });
+                  }
                 };
 
-                ClientsService.getClientMembersByClient(vm.incident.client)
+                ClientsService.getClientMembersByClient(vm.incService.incident.client)
                 .then(function(response){
 
                   $scope.modalClientsSearch.data = response.data;
@@ -246,13 +253,12 @@
                 // --> Termina F2 en affiliates
 
                 $scope.ok = function() {
-                  console.log($scope.modalClientsSearch.selectedItems[0]);
-                  if ($scope.modalClientsSearch.selectedItems.length === 0) {
+                  if (!$scope.modalClientsSearch.selectedRow) {
                     toastr.warning('Debe seleccionar al menos un cliente');
                     return;
                   }
 
-                  vm.incident.affiliateNumber = $scope.modalClientsSearch.selectedItems[0].NroAfiliado;
+                  vm.incService.incident.affiliateNumber = $scope.modalClientsSearch.selectedRow.entity.NroAfiliado;
                   validateAffiliate();
                   $modalInstance.close();
                 };
@@ -274,28 +280,39 @@
             controller: function($scope, $modalInstance) {
 
               $scope.modalSymptomsSearch                             = {};
-              $scope.modalSymptomsSearch.selectedItems               = [];
-              $scope.modalSymptomsSearch.data                        = SettingsService.settings.symptoms;
+              $scope.modalSymptomsSearch.selectedRow               = null;
+              $scope.modalSymptomsSearch.data                        = SettingsService.symptoms;
 
               $scope.modalSymptomsSearch.gridOptions =  {
                 data: 'modalSymptomsSearch.data',
-                multiSelect : false,
-                enableFiltering: true,
-                showFilter : true,
                 selectedItems : $scope.modalSymptomsSearch.selectedItems,
                 columnDefs: [
-                  { displayName: 'Descripción', field: 'descripcion' }]
+                  { displayName: 'Descripción', field: 'descripcion' }],
+                  enableRowSelection: true,
+                  enableRowHeaderSelection: false,
+                  multiSelect: false,
+                  modifierKeysToMultiSelect : true,
+                  noUnselect: true,
+                  showFooter: false,
+                  enableFiltering: true,
+                  showFilter: true,
+                  enableGridMenu : true,
+                  onRegisterApi : function(gridApi) {
+                    $scope.gridApi = gridApi;
+
+                    $scope.gridApi.selection.on.rowSelectionChanged($scope, function(row){
+                      $scope.modalSymptomsSearch.selectedRow = row;
+                    });
+                  }
                 };
 
-                // --> Termina F2 en affiliates
-
                 $scope.ok = function() {
-                  if ($scope.modalSymptomsSearch.selectedItems.length === 0) {
+                  if (!$scope.modalSymptomsSearch.selectedRow) {
                     toastr.warning('Debe seleccionar al menos un síntoma');
                     return;
                   }
 
-                  vm.incident.symptoms = $scope.modalSymptomsSearch.selectedItems[0].descripcion;
+                  vm.incService.incident.symptoms = $scope.modalSymptomsSearch.selectedRow.entity.descripcion;
                   $modalInstance.close();
                 };
 

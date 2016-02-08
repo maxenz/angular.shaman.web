@@ -10,15 +10,17 @@
         <div class="row">
           <div class="col-xs-8">
             <panel panel-class="panel-success panel-no-padding" heading="Incidentes">
-              <div style="height:400px" ng-grid="gridOptionsIncidents"></div>
-              <div class="panel-loading" ng-show="data.incidentsAreLoading">
-                <div class="panel-loader-circular"></div>
+              <div class="table-responsive">
+                <div style="height:400px" ui-grid="gridOptionsIncidents" ui-grid-selection ui-grid-auto-resize></div>
+                <div class="panel-loading" ng-show="data.incidentsAreLoading">
+                  <div class="panel-loader-circular"></div>
+                </div>
               </div>
             </panel>
           </div>
           <div class="col-xs-4">
             <panel panel-class="panel-success panel-no-padding" heading="Móviles">
-              <div style="height:400px" ng-grid="gridOptionsMobiles"></div>
+              <div style="height:400px" ui-grid="gridOptionsMobiles" ui-grid-selection ui-grid-auto-resize></div>
               <div class="panel-loading" ng-show="data.mobilesAreLoading">
                 <div class="panel-loader-circular"></div>
               </div>
@@ -32,7 +34,7 @@
             <button class="btn btn-social btn-spotify" ng-click="receptionCtrl.createIncident()"><i class="fa fa-plus"></i></button>
           </li>
           <li class="tooltips" data-trigger="hover" data-tooltip="Cancelar el servicio">
-            <button class="btn btn-social btn-youtube"><i class="fa fa-times"></i></button>
+            <button class="btn btn-social btn-youtube" ng-click="receptionCtrl.inactivateIncident()"><i class="fa fa-times"></i></button>
           </li>
           <li class="tooltips" data-trigger="hover" data-tooltip="Modificar el servicio">
             <button class="btn btn-social btn-apple"><i class="fa fa-pencil-square-o"></i></button>
@@ -62,50 +64,50 @@
           <form name="receptionForm" class="reception-form" novalidate>
             <div class="row">
 
-              <div class="col-xs-2">
+              <div class="col-xs-3">
                 <div class="form-group">
                   <label for="#" class="control-label">Fecha de Incidente</label>
                   <p class="input-group">
-                    <input type="text" class="form-control datepicker" datepicker-popup="{{receptionCtrl.datepicker.format}}" ng-model="receptionCtrl.incident.incDate" ng-disabled="true" is-open="receptionCtrl.datepicker.opened" datepicker-options="receptionCtrl.datepicker.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                    <input type="text" class="form-control datepicker" datepicker-popup="{{receptionCtrl.datepicker.format}}" ng-model="receptionCtrl.incService.incident.incDate" ng-disabled="true" is-open="receptionCtrl.datepicker.opened" datepicker-options="receptionCtrl.datepicker.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
                     <span class="input-group-btn">
-                      <button type="button" class="btn btn-default" ng-disabled="receptionCtrl.incident.inputBlocked" ng-click="receptionCtrl.datepicker.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                      <button type="button" class="btn btn-default" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-click="receptionCtrl.datepicker.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                   </p>
                 </div>
               </div>
 
-              <div class="col-xs-2">
+              <div class="col-xs-1">
                 <div class="form-group">
-                  <label for="#" class="control-label">Nro de incidente</label>
-                  <input class="form-control" type="text" ng-disabled="true" placeholder="Nro. de incidente" ng-disabled="receptionCtrl.incident.inputBlocked" ng-model="receptionCtrl.incident.number" />
+                  <label for="#" class="control-label">Número</label>
+                  <input class="form-control" type="text" ng-disabled="true" placeholder="Nro." ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.number" />
                 </div>
               </div>
 
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Telefono</label>
-                  <input class="form-control" type="text" placeholder="Teléfono" ng-disabled="receptionCtrl.incident.inputBlocked" ng-model="receptionCtrl.incident.phoneNumber" ng-blur="receptionCtrl.getDataByPhone()" />
+                  <input class="form-control" type="text" placeholder="Teléfono" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.phoneNumber" ng-blur="receptionCtrl.getDataByPhone()" />
                 </div>
               </div>
 
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Cliente</label>
-                  <input class="form-control" type="text" placeholder="Cliente" ng-disabled="receptionCtrl.incident.inputBlocked" ng-model="receptionCtrl.incident.client" ng-blur="receptionCtrl.validateClient()" />
+                  <input class="form-control" type="text" placeholder="Cliente" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.client" ng-blur="receptionCtrl.validateClient()" />
                 </div>
               </div>
 
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Nro. Afiliado</label>
-                  <input class="form-control" type="text" ng-keyup="receptionCtrl.affiliateKeyPress($event.keyCode)"  placeholder="Nro. de afiliado" ng-disabled="receptionCtrl.incident.inputBlocked" ng-model="receptionCtrl.incident.affiliateNumber" ng-blur="receptionCtrl.validateAffiliate()" />
+                  <input class="form-control" type="text" ng-keyup="receptionCtrl.affiliateKeyPress($event.keyCode)"  placeholder="Nro. de afiliado" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.affiliateNumber" ng-blur="receptionCtrl.validateAffiliate()" />
                 </div>
               </div>
 
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Aviso</label>
-                  <input class="form-control" type="text" placeholder="Aviso" ng-disabled="receptionCtrl.incident.inputBlocked" ng-model="receptionCtrl.incident.advertise" />
+                  <input class="form-control" type="text" placeholder="Aviso" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.advertise" />
                 </div>
               </div>
 
@@ -116,21 +118,21 @@
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Localidad</label>
-                  <input class="form-control" type="text" placeholder="Localidad" ng-blur="receptionCtrl.validateLocality()" ng-disabled="receptionCtrl.incident.inputBlocked" ng-model="receptionCtrl.incident.locAbreviature" />
+                  <input class="form-control" type="text" placeholder="Localidad" ng-blur="receptionCtrl.validateLocality()" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.locAbreviature" />
                 </div>
               </div>
 
               <div class="col-xs-5">
                 <div class="form-group">
                   <label for="#" class="control-label">Descripcion de la localidad</label>
-                  <input class="form-control" type="text" ng-disabled="true" placeholder="Descripcion de la localidad" ng-model="receptionCtrl.incident.locality" />
+                  <input class="form-control" type="text" ng-disabled="true" placeholder="Descripcion de la localidad" ng-model="receptionCtrl.incService.incident.locality" />
                 </div>
               </div>
 
               <div class="col-xs-5">
                 <div class="form-group">
                   <label for="#" class="control-label">Partido</label>
-                  <input class="form-control" type="text" placeholder="Partido" ng-disabled="true" ng-model="receptionCtrl.incident.partido" />
+                  <input class="form-control" type="text" placeholder="Partido" ng-disabled="true" ng-model="receptionCtrl.incService.incident.partido" />
                 </div>
               </div>
 
@@ -140,25 +142,25 @@
               <div class="col-xs-6">
                 <div class="form-group">
                   <label for="#" class="control-label">Domicilio</label>
-                  <input class="form-control" type="text" placeholder="Domicilio" ng-disabled="receptionCtrl.incident.inputBlocked" ng-model="receptionCtrl.incident.domicile.street" />
+                  <input class="form-control" type="text" placeholder="Domicilio" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.domicile.street" />
                 </div>
               </div>
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Altura</label>
-                  <input class="form-control" type="text" placeholder="Altura" ng-disabled="receptionCtrl.incident.inputBlocked" ng-model="receptionCtrl.incident.domicile.height" />
+                  <input class="form-control" type="text" placeholder="Altura" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.domicile.height" />
                 </div>
               </div>
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Piso</label>
-                  <input class="form-control" type="text" placeholder="Piso" ng-disabled="receptionCtrl.incident.inputBlocked" ng-model="receptionCtrl.incident.domicile.floor" />
+                  <input class="form-control" type="text" placeholder="Piso" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.domicile.floor" />
                 </div>
               </div>
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Departamento</label>
-                  <input class="form-control" type="text" placeholder="Departamento"  ng-disabled="receptionCtrl.incident.inputBlocked" ng-model="receptionCtrl.incident.domicile.department" />
+                  <input class="form-control" type="text" placeholder="Departamento"  ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.domicile.department" />
                 </div>
               </div>
 
@@ -169,21 +171,21 @@
               <div class="col-xs-4">
                 <div class="form-group">
                   <label for="#" class="control-label">Entrecalle 1</label>
-                  <input class="form-control" type="text" placeholder="Entrecalle 1" ng-disabled="receptionCtrl.incident.inputBlocked" ng-model="receptionCtrl.incident.domicile.betweenFirstStreet" />
+                  <input class="form-control" type="text" placeholder="Entrecalle 1" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.domicile.betweenFirstStreet" />
                 </div>
               </div>
 
               <div class="col-xs-4">
                 <div class="form-group">
                   <label for="#" class="control-label">Entrecalle 2</label>
-                  <input class="form-control" type="text" placeholder="Entrecalle 2" ng-disabled="receptionCtrl.incident.inputBlocked" ng-model="receptionCtrl.incident.domicile.betweenSecondStreet" />
+                  <input class="form-control" type="text" placeholder="Entrecalle 2" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.domicile.betweenSecondStreet" />
                 </div>
               </div>
 
               <div class="col-xs-4">
                 <div class="form-group">
                   <label for="#" class="control-label">Referencias</label>
-                  <input class="form-control" type="text" placeholder="Referencias" ng-disabled="receptionCtrl.incident.inputBlocked" ng-model="receptionCtrl.incident.references" />
+                  <input class="form-control" type="text" placeholder="Referencias" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.references" />
                 </div>
               </div>
 
@@ -194,28 +196,28 @@
               <div class="col-xs-1">
                 <div class="form-group">
                   <label for="#" class="control-label">Sexo</label>
-                  <select class="form-control" ng-disabled="receptionCtrl.incident.inputBlocked" ng-options="item as item.label for item in receptionCtrl.sexOptions track by item.id" ng-model="receptionCtrl.sexSelected"></select>
+                  <select class="form-control" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-options="item as item.label for item in receptionCtrl.sexOptions track by item.id" ng-model="receptionCtrl.incService.incident.sexSelected"></select>
                 </div>
               </div>
 
               <div class="col-xs-1">
                 <div class="form-group">
                   <label for="#" class="control-label">Edad</label>
-                  <input class="form-control" ng-disabled="receptionCtrl.incident.inputBlocked" type="number" placeholder="Edad" ng-model="receptionCtrl.incident.age" />
+                  <input class="form-control" ng-disabled="receptionCtrl.incService.incident.inputBlocked" type="number" placeholder="Edad" ng-model="receptionCtrl.incService.incident.age" />
                 </div>
               </div>
 
               <div class="col-xs-7">
                 <div class="form-group">
                   <label for="#" class="control-label">Motivo de llamada - sintomas</label>
-                  <input class="form-control" type="text" ng-keyup="receptionCtrl.symptomsKeyPress($event.keyCode)"  ng-disabled="receptionCtrl.incident.inputBlocked" placeholder="Sintomas" ng-model="receptionCtrl.incident.symptoms" />
+                  <input class="form-control" type="text" ng-keyup="receptionCtrl.symptomsKeyPress($event.keyCode)"  ng-disabled="receptionCtrl.incService.incident.inputBlocked" placeholder="Sintomas" ng-model="receptionCtrl.incService.incident.symptoms" />
                 </div>
               </div>
 
               <div class="col-xs-3">
                 <div class="form-group">
                   <label for="#" class="control-label">Grado</label>
-                  <select class="form-control" id="receptionCtrl.selOperativeGrades" ng-disabled="receptionCtrl.incident.inputBlocked" ng-options="item as item.label for item in receptionCtrl.operativeGradeOptions track by item.id" ng-model="receptionCtrl.operativeGradeSelected"></select>
+                  <select class="form-control" id="receptionCtrl.selOperativeGrades" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-options="item as item.label for item in receptionCtrl.operativeGradeOptions track by item.id" ng-model="receptionCtrl.incService.incident.operativeGradeSelected"></select>
                 </div>
               </div>
 
@@ -226,25 +228,25 @@
               <div class="col-xs-6">
                 <div class="form-group">
                   <label for="#" class="control-label">Paciente</label>
-                  <input class="form-control" ng-disabled="receptionCtrl.incident.inputBlocked" type="text" placeholder="Paciente" ng-model="receptionCtrl.incident.patient" />
+                  <input class="form-control" ng-disabled="receptionCtrl.incService.incident.inputBlocked" type="text" placeholder="Paciente" ng-model="receptionCtrl.incService.incident.patient" />
                 </div>
               </div>
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">IVA</label>
-                  <select class="form-control" id="receptionCtrl.selIvaSituations" ng-disabled="receptionCtrl.incident.inputBlocked" ng-options="item as item.label for item in receptionCtrl.ivaSituationsOptions track by item.id" ng-model="receptionCtrl.ivaSituationSelected"></select>
+                  <select class="form-control" id="receptionCtrl.selIvaSituations" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-options="item as item.label for item in receptionCtrl.ivaSituationsOptions track by item.id" ng-model="receptionCtrl.incService.incident.ivaSituationSelected"></select>
                 </div>
               </div>
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Plan</label>
-                  <select class="form-control" ng-disabled="receptionCtrl.incident.inputBlocked" ng-options="item as item.label for item in receptionCtrl.plansOptions track by item.id" ng-model="receptionCtrl.planSelected"></select>
+                  <select class="form-control"  ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-options="item as item.label for item in receptionCtrl.cliService.planOptions track by item.id" ng-model="receptionCtrl.incService.incident.planSelected"></select>
                 </div>
               </div>
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Copago</label>
-                  <input class="form-control" ng-disabled="receptionCtrl.incident.inputBlocked" type="text" placeholder="Copago" ng-model="receptionCtrl.incident.copayment" />
+                  <input class="form-control" ng-disabled="receptionCtrl.incService.incident.inputBlocked" type="text" placeholder="Copago" ng-model="receptionCtrl.incService.incident.copayment" />
                 </div>
               </div>
 
@@ -255,28 +257,28 @@
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Diagnostico</label>
-                  <input class="form-control" ng-disabled="receptionCtrl.incident.inputBlocked" type="text" placeholder="Diagnostico" ng-model="receptionCtrl.incident.diagnosis" />
+                  <input class="form-control" ng-disabled="receptionCtrl.incService.incident.inputBlocked" type="text" placeholder="Diagnostico" ng-model="receptionCtrl.incService.incident.diagnosis" />
                 </div>
               </div>
 
               <div class="col-xs-4">
                 <div class="form-group">
                   <label for="#" class="control-label">Cierre</label>
-                  <input class="form-control" ng-disabled="receptionCtrl.incident.inputBlocked" type="text" placeholder="Cierre" ng-model="receptionCtrl.incident.closing" />
+                  <input class="form-control" ng-disabled="receptionCtrl.incService.incident.inputBlocked" type="text" placeholder="Cierre" ng-model="receptionCtrl.incService.incident.closing" />
                 </div>
               </div>
 
               <div class="col-xs-4">
                 <div class="form-group">
                   <label for="#" class="control-label">Paciente derivado en</label>
-                  <input class="form-control" ng-disabled="receptionCtrl.incident.inputBlocked" type="text" placeholder="Paciente derivado en" ng-model="receptionCtrl.incident.patientDerivedIn" />
+                  <input class="form-control" ng-disabled="receptionCtrl.incService.incident.inputBlocked" type="text" placeholder="Paciente derivado en" ng-model="receptionCtrl.incService.incident.patientDerivedIn" />
                 </div>
               </div>
 
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Viaje</label>
-                  <input type="checkbox" ng-disabled="receptionCtrl.incident.inputBlocked"  class="js-switch" ng-model="receptionCtrl.incident.tripRealized" ui-switch="{color: '#7dcc93', secondaryColor: '#c5cbd1'}" />
+                  <input type="checkbox" ng-disabled="receptionCtrl.incService.incident.inputBlocked"  class="js-switch" ng-model="receptionCtrl.incService.incident.tripRealized" ui-switch="{color: '#7dcc93', secondaryColor: '#c5cbd1'}" />
                 </div>
               </div>
 
@@ -285,8 +287,8 @@
             <hr/>
             <div class="row">
               <div class="btn-group" role="group" aria-label="..." style="float:right">
-                <button class="btn btn-primary" ng-hide="receptionCtrl.incident.inputBlocked" ng-click="receptionCtrl.saveIncident()">Guardar cambios</button>
-                <button class="btn btn-danger" ng-hide="receptionCtrl.incident.inputBlocked" ng-click="receptionCtrl.cancelIncident()">Cancelar</button>
+                <button class="btn btn-primary" ng-hide="receptionCtrl.incService.incident.inputBlocked" ng-click="receptionCtrl.saveIncident()">Guardar cambios</button>
+                <button class="btn btn-danger" ng-hide="receptionCtrl.incService.incident.inputBlocked" ng-click="receptionCtrl.cancelIncident()">Cancelar</button>
               </div>
             </div>
 
@@ -305,30 +307,30 @@
 <!-- Comienzo de templates de modals de form de recepcion -->
 
 <script type="text/ng-template" id="clients-search-modal.html">
-    <div class="modal-header">
-        <h3 class="modal-title">Búsqueda de clientes</h3>
-    </div>
-    <div class="modal-body">
-        <div style="height:400px" ng-grid="modalClientsSearch.gridOptions"></div>
-        <div class="panel-loading" ng-show="modalClientsSearch.clientsAreLoading">
-          <div class="panel-loader-circular"></div>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="ok()">OK</button>
-        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-    </div>
+<div class="modal-header">
+<h3 class="modal-title">Búsqueda de clientes</h3>
+</div>
+<div class="modal-body">
+<div style="height:400px" ui-grid="modalClientsSearch.gridOptions" ui-grid-edit ui-grid-selection ui-grid-auto-resize></div>
+<div class="panel-loading" ng-show="modalClientsSearch.clientsAreLoading">
+<div class="panel-loader-circular"></div>
+</div>
+</div>
+<div class="modal-footer">
+<button class="btn btn-primary" ng-click="ok()">OK</button>
+<button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>
 </script>
 
 <script type="text/ng-template" id="symptoms-search-modal.html">
-    <div class="modal-header">
-        <h3 class="modal-title">Búsqueda de Síntomas</h3>
-    </div>
-    <div class="modal-body">
-        <div style="height:400px" ng-grid="modalSymptomsSearch.gridOptions"></div>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="ok()">OK</button>
-        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-    </div>
+<div class="modal-header">
+<h3 class="modal-title">Búsqueda de Síntomas</h3>
+</div>
+<div class="modal-body">
+<div style="height:400px" ui-grid="modalSymptomsSearch.gridOptions" ui-grid-edit ui-grid-selection ui-grid-auto-resize></div>
+</div>
+<div class="modal-footer">
+<button class="btn btn-primary" ng-click="ok()">OK</button>
+<button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>
 </script>

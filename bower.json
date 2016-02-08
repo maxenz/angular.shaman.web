@@ -60,7 +60,8 @@
     "velocity": "~1.2.2",
     "angular-google-maps": "~2.2.1",
     "angular-toastr": "~1.6.0",
-    "angular-modal-service": "~0.6.9"
+    "angular-modal-service": "~0.6.9",
+    "angular-bootstrap-contextmenu": "~0.9.6"
   },
   "resolutions": {
     "jquery": "~1.11.0",
