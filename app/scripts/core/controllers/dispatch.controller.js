@@ -24,8 +24,12 @@
         { displayName: 'Mov', field: 'Movil' },
         { displayName: 'Zona', field: 'ZonaGeograficaId' },
         { displayName: 'Est', field: 'ValorGrilla' }],
-        selectionRowHeaderWidth: 35,
+        enableRowSelection: true,
+        enableRowHeaderSelection: false,
         multiSelect: false,
+        modifierKeysToMultiSelect : true,
+        noUnselect: true,
+        showFooter: false,
         enableFiltering: true,
         showFilter: true
       };
@@ -57,7 +61,7 @@
           showFooter: false,
           enableFiltering: true,
           showFilter: true,
-          enableGridMenu : true,
+
           onRegisterApi : function(gridApi) {
             $scope.gridApi = gridApi;
 

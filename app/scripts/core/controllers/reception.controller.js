@@ -29,6 +29,10 @@
       vm.saveIncident       = saveIncident;
       vm.cancelIncident     = cancelIncident;
       vm.createIncident     = createIncident;
+      vm.firstIncident      = firstIncident;
+      vm.previousIncident   = previousIncident;
+      vm.nextIncident       = nextIncident;
+      vm.lastIncident       = lastIncident;
       vm.inactivateIncident = inactivateIncident;
       vm.getDataByPhone     = getDataByPhone;
       vm.validateClient     = validateClient;
@@ -57,7 +61,10 @@
         }
       }
 
+      // --> Funciones de la barra de navegacion de panel de recepción
+
       function createIncident() {
+        vm.buttonsDisabled = true;
         IncidentService.getNewIncidentNumberToCreate()
         .then(function(response){
           resetIncident();
@@ -81,6 +88,45 @@
       function inactivateIncident() {
         resetIncident();
         vm.incService.incident.inputBlocked = true;
+        vm.buttonsDisabled = false;
+      }
+
+      function firstIncident() {
+        IncidentService.getFirst()
+        .then(function(response){
+          IncidentService.setIncident(response.data);
+        });
+      }
+
+      function lastIncident() {
+        IncidentService.getLast()
+        .then(function(response){
+          IncidentService.setIncident(response.data);
+        });
+      }
+
+      function nextIncident() {
+        if (vm.incService.incident.id) {
+          IncidentService.getNext(vm.incService.incident.id)
+          .then(function(response){
+            if (response.data.ID !== 0) {
+              IncidentService.setIncident(response.data);
+            }
+
+          });
+        }
+      }
+
+      function previousIncident() {
+        if (vm.incService.incident.id) {
+          IncidentService.getPrevious(vm.incService.incident.id)
+          .then(function(response){
+            if (response.data.ID !== 0) {
+              IncidentService.setIncident(response.data);
+            }
+
+          });
+        }
       }
 
       function getDataByPhone() {
@@ -228,7 +274,6 @@
                   showFooter: false,
                   enableFiltering: true,
                   showFilter: true,
-                  enableGridMenu : true,
                   onRegisterApi : function(gridApi) {
                     $scope.gridApi = gridApi;
 
@@ -296,7 +341,6 @@
                   showFooter: false,
                   enableFiltering: true,
                   showFilter: true,
-                  enableGridMenu : true,
                   onRegisterApi : function(gridApi) {
                     $scope.gridApi = gridApi;
 

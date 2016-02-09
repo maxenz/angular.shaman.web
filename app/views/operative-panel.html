@@ -37,28 +37,28 @@
             <button class="btn btn-social btn-youtube" ng-click="receptionCtrl.inactivateIncident()"><i class="fa fa-times"></i></button>
           </li>
           <li class="tooltips" data-trigger="hover" data-tooltip="Modificar el servicio">
-            <button class="btn btn-social btn-apple"><i class="fa fa-pencil-square-o"></i></button>
+            <button class="btn btn-social btn-apple" ng-disabled="receptionCtrl.buttonsDisabled"><i class="fa fa-pencil-square-o"></i></button>
           </li>
           <li class="tooltips" data-trigger="hover" data-tooltip="Actualizar los datos del servicio">
-            <button class="btn btn-social btn-soundcloud"><i class="fa fa-refresh"></i></button>
+            <button class="btn btn-social btn-soundcloud" ng-disabled="receptionCtrl.buttonsDisabled"><i class="fa fa-refresh"></i></button>
           </li>
           <li class="tooltips" data-trigger="hover" data-tooltip="Regresa al primer servicio de la fecha">
-            <button class="btn btn-social btn-facebook"><i class="fa fa-step-backward"></i></button>
+            <button class="btn btn-social btn-facebook" ng-disabled="receptionCtrl.buttonsDisabled" ng-click="receptionCtrl.firstIncident()"><i class="fa fa-step-backward"></i></button>
           </li>
-          <li class="tooltips" data-trigger="hover" data-tooltip="Regresa al sservicio anterior">
-            <button class="btn btn-social btn-spotify"><i class="fa fa-backward"></i></button>
+          <li class="tooltips" data-trigger="hover" data-tooltip="Regresa al servicio anterior">
+            <button class="btn btn-social btn-spotify" ng-disabled="receptionCtrl.buttonsDisabled" ng-click="receptionCtrl.previousIncident()"><i class="fa fa-backward"></i></button>
           </li>
           <li class="tooltips" data-trigger="hover" data-tooltip="Avanza al siguiente servicio">
-            <button class="btn btn-social btn-spotify"><i class="fa fa-step-forward"></i></button>
+            <button class="btn btn-social btn-spotify" ng-disabled="receptionCtrl.buttonsDisabled" ng-click="receptionCtrl.nextIncident()"><i class="fa fa-step-forward"></i></button>
           </li>
           <li class="tooltips" data-trigger="hover" data-tooltip="Avanza hasta el último servicio">
-            <button class="btn btn-social btn-facebook"><i class="fa fa-forward"></i></button>
+            <button class="btn btn-social btn-facebook" ng-disabled="receptionCtrl.buttonsDisabled" ng-click="receptionCtrl.lastIncident()"><i class="fa fa-forward"></i></button>
           </li>
           <li class="tooltips" data-trigger="hover" data-tooltip="Categorizaciones">
-            <button class="btn btn-social btn-soundcloud"><i class="fa fa-users"></i></button>
+            <button class="btn btn-social btn-soundcloud" ng-disabled="receptionCtrl.buttonsDisabled"><i class="fa fa-users"></i></button>
           </li>
           <li class="tooltips" data-trigger="hover" data-tooltip="Imprimir el servicio">
-            <button class="btn btn-social btn-apple"><i class="fa fa-print"></i></button></li>
+            <button class="btn btn-social btn-apple" ng-disabled="receptionCtrl.buttonsDisabled"><i class="fa fa-print"></i></button></li>
           </ul>
 
           <form name="receptionForm" class="reception-form" novalidate>

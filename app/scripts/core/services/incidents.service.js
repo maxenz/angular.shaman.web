@@ -26,7 +26,9 @@
       return $http.get(shamanConfiguration.url + 'api/incidents/GetNewIncidentNumberToCreate');
     }
 
-    function setIncident(incident) {
+    function setIncident(data) {
+      var incident                                  = UtilsService.toCamel(data);
+      service.incident.id                           = incident.id;
       service.incident.age                          = incident.edad;
       service.incident.number                       = incident.nroIncidente;
       service.incident.affiliateNumber              = incident.nroAfiliado;
@@ -48,9 +50,9 @@
       service.incident.symptoms                     = incident.sintomas;
 
       if (incident.gradoOperativo) {
-      service.incident.operativeGradeSelected       = UtilsService.getObjectByPropertyInArray(SettingsService.operativeGradeOptions, 'label', incident.gradoOperativo.descripcion);
+        service.incident.operativeGradeSelected       = UtilsService.getObjectByPropertyInArray(SettingsService.operativeGradeOptions, 'label', incident.gradoOperativo.descripcion);
       }
-      
+
       service.incident.sexSelected                  = UtilsService.getObjectByPropertyInArray(SettingsService.sexOptions, 'label', incident.sexo);
       service.incident.ivaSituationSelected         = UtilsService.getObjectByPropertyInArray(SettingsService.ivaSituationsOptions, 'id', incident.cliente.situacionIvaId.id );
 
@@ -67,6 +69,22 @@
       return $http.get(shamanConfiguration.url + 'api/incidents/getById?id=' + id);
     }
 
+    function getLast() {
+      return $http.get(shamanConfiguration.url + 'api/incidents/getLast');
+    }
+
+    function getPrevious(id) {
+      return $http.get(shamanConfiguration.url + 'api/incidents/getPrevious?id=' + id);
+    }
+
+    function getNext(id) {
+      return $http.get(shamanConfiguration.url + 'api/incidents/getNext?id=' + id);
+    }
+
+    function getFirst() {
+      return $http.get(shamanConfiguration.url + 'api/incidents/getFirst');
+    }
+
     var service = {
       incident                     : {},
       getAll                       : getAll,
@@ -74,7 +92,11 @@
       validateLocality             : validateLocality,
       getNewIncidentNumberToCreate : getNewIncidentNumberToCreate,
       setIncident                  : setIncident,
-      getIncidentById              : getIncidentById
+      getIncidentById              : getIncidentById,
+      getLast                      : getLast,
+      getPrevious                  : getPrevious,
+      getNext                      : getNext,
+      getFirst                     : getFirst
     };
 
     return service;
