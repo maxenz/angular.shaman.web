@@ -13,7 +13,6 @@ angular
     'theme.demos.horizontal_layout',
     'theme.demos.dashboard',
     'theme.demos.chatbox',
-    'theme.demos.gallery',
     'theme.demos.editable_table',
     'theme.demos.google_maps',
     'theme.demos.vector_maps',
@@ -25,20 +24,4 @@ angular
     'theme.demos.error_page',
     'theme.demos.tasks',
     'theme.demos.mail',
-  ])
-  .directive('img', ['$timeout', function ($t) {
-      // NOTE: this affects all <img> tags
-      // Remove this directive for production
-    'use strict';
-      return {
-      restrict: 'E',
-      link: function (scope, element) {
-        $t ( function () {
-            var src = element.attr('src') || element.attr('ng-src');
-          if (src.match(/assets\/demo/)) {
-            element.attr('src', 'http://placehold.it/400&text=Placeholder');
-          }
-        }, 10);
-      }
-      };
-  }]);
+  ]);

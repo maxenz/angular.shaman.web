@@ -5,7 +5,7 @@ angular.module('theme.core.main_controller', ['theme.core.services'])
 
     // propias de Shaman
 
-    $scope.mapService = MapService.data;
+    $scope.mapService = MapService;
 
     // $scope.layoutIsSmallScreen = false;
     $scope.layoutFixedHeader = $theme.get('fixedHeader');
@@ -120,57 +120,6 @@ angular.module('theme.core.main_controller', ['theme.core.services'])
       $theme.set('showSmallSearchBar', !$theme.get('showSmallSearchBar'));
     };
 
-    $scope.chatters = [{
-      id: 0,
-      status: 'online',
-      avatar: 'potter.png',
-      name: 'Jeremy Potter'
-    }, {
-      id: 1,
-      status: 'online',
-      avatar: 'tennant.png',
-      name: 'David Tennant'
-    }, {
-      id: 2,
-      status: 'online',
-      avatar: 'johansson.png',
-      name: 'Anna Johansson'
-    }, {
-      id: 3,
-      status: 'busy',
-      avatar: 'jackson.png',
-      name: 'Eric Jackson'
-    }, {
-      id: 4,
-      status: 'online',
-      avatar: 'jobs.png',
-      name: 'Howard Jobs'
-    }, {
-      id: 5,
-      status: 'online',
-      avatar: 'potter.png',
-      name: 'Jeremy Potter'
-    }, {
-      id: 6,
-      status: 'away',
-      avatar: 'tennant.png',
-      name: 'David Tennant'
-    }, {
-      id: 7,
-      status: 'away',
-      avatar: 'johansson.png',
-      name: 'Anna Johansson'
-    }, {
-      id: 8,
-      status: 'online',
-      avatar: 'jackson.png',
-      name: 'Eric Jackson'
-    }, {
-      id: 9,
-      status: 'online',
-      avatar: 'jobs.png',
-      name: 'Howard Jobs'
-    }];
     $scope.currentChatterId = null;
     $scope.hideChatBox = function() {
       $theme.set('showChatBox', false);
