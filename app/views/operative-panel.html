@@ -8,7 +8,7 @@
     <tabset panel-tabs="true" panel-class="panel-success">
       <tab heading="Despacho" ng-controller="dispatchController">
         <div class="row">
-          <div class="col-xs-8">
+          <div class="col-xs-10">
             <panel panel-class="panel-success panel-no-padding" heading="Incidentes">
               <div class="table-responsive">
                 <div style="height:400px" ui-grid="gridOptionsIncidents" ui-grid-selection ui-grid-auto-resize></div>
@@ -18,7 +18,7 @@
               </div>
             </panel>
           </div>
-          <div class="col-xs-4">
+          <div class="col-xs-2">
             <panel panel-class="panel-success panel-no-padding" heading="Móviles">
               <div style="height:400px" ui-grid="gridOptionsMobiles" ui-grid-selection ui-grid-auto-resize></div>
               <div class="panel-loading" ng-show="data.mobilesAreLoading">

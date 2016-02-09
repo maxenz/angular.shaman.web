@@ -5,10 +5,10 @@
   .controller('receptionController', receptionController);
 
   receptionController.$inject = ['$filter', '$theme', 'MobileService',
-  'IncidentService', 'UtilsService', '$modal', '$bootbox', 'SettingsService', 'ClientsService', 'toastr'];
+  'IncidentService', 'UtilsService', '$modal', '$bootbox', 'SettingsService', 'ClientsService', 'toastr', 'uiGridConstants'];
 
   function receptionController($filter, $theme, MobileService, IncidentService, UtilsService, $modal, $bootbox,
-    SettingsService, ClientsService, toastr) {
+    SettingsService, ClientsService, toastr, uiGridConstants) {
       'use strict';
 
       var vm                   = this;
@@ -208,27 +208,6 @@
         vm.incService.incident.incDate = moment().format("DD/MM/YYYY");
       }
 
-      // function setIncident(incident) {
-      //   vm.incService.incident.age                          = incident.edad;
-      //   vm.incService.incident.afiliateNumber               = incident.nroAfiliado;
-      //   vm.incService.incident.client                       = incident.abreviaturaId;
-      //   vm.incService.incident.advertise                    = incident.aviso;
-      //   vm.incService.incident.patient                      = incident.paciente;
-      //   vm.incService.incident.phoneNumber                  = incident.telefono;
-      //   vm.incService.incident.locAbreviature               = incident.localidad.abreviaturaId;
-      //   vm.incService.incident.locality                     = incident.localidad.descripcion;
-      //   vm.incService.incident.partido                      = incident.localidad.partido.descripcion;
-      //   vm.incService.incident.domicile.street              = incident.domicilio.street;
-      //   vm.incService.incident.domicile.height              = incident.domicilio.height;
-      //   vm.incService.incident.domicile.floor               = incident.domicilio.floor;
-      //   vm.incService.incident.domicile.department          = incident.domicilio.department;
-      //   vm.incService.incident.domicile.betweenFirstStreet  = incident.domicilio.betweenStreet1;
-      //   vm.incService.incident.domicile.betweenSecondStreet = incident.domicilio.betweenStreet2;
-      //   vm.sexSelected                           = UtilsService.getObjectByPropertyInArray(vm.sexOptions, 'label', incident.sexo);
-      //   vm.operativeGradeSelected                = UtilsService.getObjectByPropertyInArray(vm.operativeGradeOptions, 'label', incident.gradoOperativo.descripcion);
-      //   vm.ivaSituationSelected                  = UtilsService.getObjectByPropertyInArray(vm.ivaSituationsOptions, 'id', incident.situacionIvaId );
-      // }
-
       function setLocality(locality) {
         vm.incService.incident.partido = locality.partido.descripcion +
         ' (' + locality.province.abreviaturaId + '-' + locality.geographicZone.descripcion + ')';
@@ -274,6 +253,7 @@
                   showFooter: false,
                   enableFiltering: true,
                   showFilter: true,
+                  enableHorizontalScrollbar : uiGridConstants.scrollbars.NEVER,
                   onRegisterApi : function(gridApi) {
                     $scope.gridApi = gridApi;
 
@@ -341,6 +321,7 @@
                   showFooter: false,
                   enableFiltering: true,
                   showFilter: true,
+                  enableHorizontalScrollbar : uiGridConstants.scrollbars.NEVER,
                   onRegisterApi : function(gridApi) {
                     $scope.gridApi = gridApi;
 

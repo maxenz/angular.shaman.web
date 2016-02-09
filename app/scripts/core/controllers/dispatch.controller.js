@@ -4,8 +4,8 @@
   .module('theme.core.dispatch_controller', ['ngGrid'])
   .controller('dispatchController', dispatchController);
 
-  dispatchController.$inject = ['$scope', '$filter', '$theme', 'MobileService', 'IncidentService', '$log', 'UtilsService'];
-  function dispatchController($scope, $filter, $theme, MobileService, IncidentService, $log, UtilsService) {
+  dispatchController.$inject = ['$scope', '$filter', '$theme', 'MobileService', 'IncidentService', '$log', 'UtilsService', 'uiGridConstants'];
+  function dispatchController($scope, $filter, $theme, MobileService, IncidentService, $log, UtilsService, uiGridConstants) {
     'use strict';
 
     $scope.data = {};
@@ -17,6 +17,9 @@
     $scope.incidents = [];
     $scope.loadMobiles = loadMobiles;
     $scope.loadIncidents = loadIncidents;
+
+    console.log('scrollbars');
+    console.log(uiGridConstants.scrollbars.NEVER);
 
     $scope.gridOptionsMobiles = {
       data: 'mobiles',
@@ -31,13 +34,14 @@
         noUnselect: true,
         showFooter: false,
         enableFiltering: true,
-        showFilter: true
+        showFilter: true,
+        enableHorizontalScrollbar : uiGridConstants.scrollbars.NEVER
       };
 
       $scope.gridOptionsIncidents = {
         data: 'incidents',
         columnDefs: [
-          { displayName: 'IncidenteId', field: 'IncidenteId' },
+          { displayName: 'IncidenteId', field: 'IncidenteId', hidden: true },
           { displayName: 'Gdo', field: 'AbreviaturaId' },
           { displayName: 'Cliente', field: 'Cliente' },
           { displayName: 'Nro', field: 'NroIncidente' },
@@ -61,6 +65,7 @@
           showFooter: false,
           enableFiltering: true,
           showFilter: true,
+          enableHorizontalScrollbar : uiGridConstants.scrollbars.NEVER,
 
           onRegisterApi : function(gridApi) {
             $scope.gridApi = gridApi;
