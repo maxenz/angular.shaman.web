@@ -25,7 +25,7 @@
       AuthenticationService.login($scope.data.username, $scope.data.password)
       .then(function(data){
         AuthenticationService.setCredentials($scope.data.username, $scope.data.password);
-        $location.path('/');
+        $location.path('/operative-panel');
 
 
       }, function(error){

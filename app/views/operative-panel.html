@@ -6,22 +6,20 @@
     }
     ">
     <tabset panel-tabs="true" panel-class="panel-success">
-      <tab heading="Despacho" ng-controller="dispatchController">
+      <tab heading="Despacho" ng-controller="dispatchController as dispatchCtrl">
         <div class="row">
           <div class="col-xs-10">
             <panel panel-class="panel-success panel-no-padding" heading="Incidentes">
-              <div class="table-responsive">
-                <div style="height:400px" ui-grid="gridOptionsIncidents" ui-grid-selection ui-grid-auto-resize></div>
-                <div class="panel-loading" ng-show="data.incidentsAreLoading">
-                  <div class="panel-loader-circular"></div>
-                </div>
+              <div style="height:400px" ui-grid="dispatchCtrl.gridOptionsIncidents" context-menu="dispatchCtrl.ctxMenuIncidents" ui-grid-selection ui-grid-auto-resize></div>
+              <div class="panel-loading" ng-show="dispatchCtrl.data.incidentsAreLoading">
+                <div class="panel-loader-circular"></div>
               </div>
             </panel>
           </div>
           <div class="col-xs-2">
             <panel panel-class="panel-success panel-no-padding" heading="Móviles">
-              <div style="height:400px" ui-grid="gridOptionsMobiles" ui-grid-selection ui-grid-auto-resize></div>
-              <div class="panel-loading" ng-show="data.mobilesAreLoading">
+              <div style="height:400px" ui-grid="dispatchCtrl.gridOptionsMobiles" ui-grid-selection ui-grid-auto-resize></div>
+              <div class="panel-loading" ng-show="dispatchCtrl.data.mobilesAreLoading">
                 <div class="panel-loader-circular"></div>
               </div>
             </panel>
@@ -334,5 +332,126 @@
 <div class="modal-footer">
 <button class="btn btn-primary" ng-click="ok()">OK</button>
 <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>
+</script>
+
+<script type="text/ng-template" id="dispatch-modal.html">
+<div class="modal-header">
+<h3 class="modal-title">Despacho de Servicios</h3>
+</div>
+<div class="modal-body">
+
+<div class="panel panel-success">
+<div class="panel-heading panel-heading-border" >
+<h2>Incidente</h2>
+</div>
+  <div class="panel-body">
+  <div class="row">
+
+  <div class="col-xs-2">
+    <div class="form-group">
+      <label for="#" class="control-label">Fecha</label>
+      <p class="input-group">
+        <input type="text" class="form-control datepicker" ng-model="dispatch.incident.incDate" ng-disabled="true"  datepicker-options="dispatch.datepicker.dateOptions" date-disabled="disabled(date, mode)"  />
+      </p>
+    </div>
+  </div>
+
+    <div class="col-xs-1">
+  <div class="form-group">
+    <label for="#" class="control-label">Nro.</label>
+    <input class="form-control" type="text" ng-disabled="true" ng-model="dispatch.incident.number" />
+  </div>
+</div>
+
+<div class="col-xs-1">
+  <div class="form-group">
+    <label for="#" class="control-label">Gdo.</label>
+    <input class="form-control" type="text" ng-disabled="true" ng-model="dispatch.incident.grade" />
+  </div>
+</div>
+
+<div class="col-xs-3">
+  <div class="form-group">
+    <label for="#" class="control-label">Domicilio</label>
+    <input class="form-control" type="text" ng-disabled="true" ng-model="dispatch.incident.domicile" />
+  </div>
+</div>
+
+<div class="col-xs-1">
+  <div class="form-group">
+    <label for="#" class="control-label">Localidad</label>
+    <input class="form-control" type="text" ng-disabled="true" ng-model="dispatch.incident.locality" />
+  </div>
+</div>
+
+<div class="col-xs-2">
+  <div class="form-group">
+    <label for="#" class="control-label">Despachar...</label>
+    <select class="form-control"  ng-options="item as item.label for item in dispatch.dispatchingOptions track by item.id" ng-model="dispatch.dispatchingOptionSelected" ng-change="dispatch.changeDispatchOption()"></select>
+  </div>
+</div>
+
+<div class="col-xs-1">
+  <div class="form-group">
+    <label for="#" class="control-label">Mov. A/Grado</label>
+    <input class="form-control" type="checkbox" icheck ng-model="dispatch.incident.movAptoGrado" />
+  </div>
+</div>
+
+<div class="col-xs-1">
+  <div class="form-group">
+    <label for="#" class="control-label">Mov. de Zona</label>
+    <input class="form-control" type="checkbox" icheck ng-model="dispatch.incident.movZona" />
+  </div>
+</div>
+
+  </div>
+	</div>
+  </div>
+
+  <div class="panel panel-success">
+    <div class="panel-heading panel-heading-border" >
+      <h2>{{ dispatch.bottomPanelTitle }}</h2>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+
+      <div class="col-xs-2">
+        <div class="form-group">
+          <label for="#" class="control-label">{{ dispatch.bottomPanelFirstTitle}}</label>
+          <input class="form-control" type="text" ng-model="dispatch.bottomPanelFirstField" />
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <label for="#" class="control-label">{{ dispatch.bottomPanelSecondTitle}}</label>
+          <input class="form-control" type="text" ng-disabled="true" ng-model="dispatch.bottomPanelSecondField" />
+        </div>
+      </div>
+
+      <div class="col-xs-4">
+        <div class="form-group">
+          <label for="#" class="control-label">{{ dispatch.bottomPanelThirdTitle }}</label>
+          <input class="form-control" type="text" ng-disabled="true" ng-model="dispatch.bottomPanelThirdField" />
+        </div>
+      </div>
+
+
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<div class="modal-footer">
+<button class="btn btn-primary" ng-click="ok()">OK</button>
+<button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>
 </div>
 </script>

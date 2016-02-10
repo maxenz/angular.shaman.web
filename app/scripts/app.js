@@ -58,6 +58,4 @@ function($rootScope, $location, $cookieStore, $http, SettingsService, UtilsServi
 
   });
 
-
-
 }]);
