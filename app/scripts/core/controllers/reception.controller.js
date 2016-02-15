@@ -40,6 +40,7 @@
       vm.validateLocality   = validateLocality;
       vm.affiliateKeyPress  = affiliateKeyPress;
       vm.symptomsKeyPress   = symptomsKeyPress;
+      vm.clientsKeyPress    = clientsKeyPress;
 
       vm.datepicker             = {};
       vm.datepicker.format      = 'dd/MM/yyyy';
@@ -53,12 +54,27 @@
         if (keyCode === 113) {
           showAffiliateSearchModal();
         }
+
+        if (keyCode === 115) {
+          showClientMembersAllModal();
+        }
       }
 
       function symptomsKeyPress(keyCode) {
         if (keyCode === 113) {
           showSymptomsSearchModal();
         }
+      }
+
+      function clientsKeyPress(keyCode) {
+
+        if (keyCode === 113 ) {
+          showClientsSearchModal();
+        }
+        if (keyCode === 115) {
+          showClientMembersAllModal();
+        }
+
       }
 
       // --> Funciones de la barra de navegacion de panel de recepción
@@ -228,16 +244,16 @@
         if (vm.incService.incident.client) {
 
           $modal.open({
-            templateUrl: 'clients-search-modal.html',
+            templateUrl: 'client-members-search-modal.html',
             controller: function($scope, $modalInstance) {
 
-              $scope.modalClientsSearch                   = {};
-              $scope.modalClientsSearch.clientsAreLoading = true;
-              $scope.modalClientsSearch.selectedRow       = null;
-              $scope.modalClientsSearch.data              = [];
+              $scope.modalClientMembersSearch                   = {};
+              $scope.modalClientMembersSearch.clientsAreLoading = true;
+              $scope.modalClientMembersSearch.selectedRow       = null;
+              $scope.modalClientMembersSearch.data              = [];
               // --> Comienza F2 en affiliates
-              $scope.modalClientsSearch.gridOptions =  {
-                data: 'modalClientsSearch.data',
+              $scope.modalClientMembersSearch.gridOptions =  {
+                data: 'modalClientMembersSearch.data',
                 columnDefs: [
                   { displayName: 'Cliente', field: 'AbreviaturaId' },
                   { displayName: 'Nro. Afiliado', field: 'NroAfiliado' },
@@ -258,7 +274,7 @@
                     $scope.gridApi = gridApi;
 
                     $scope.gridApi.selection.on.rowSelectionChanged($scope, function(row){
-                      $scope.modalClientsSearch.selectedRow = row;
+                      $scope.modalClientMembersSearch.selectedRow = row;
                     });
                   }
                 };
@@ -266,24 +282,24 @@
                 ClientsService.getClientMembersByClient(vm.incService.incident.client)
                 .then(function(response){
 
-                  $scope.modalClientsSearch.data = response.data;
-                  $scope.modalClientsSearch.gridOptions.enableFiltering = true;
-                  $scope.modalClientsSearch.clientsAreLoading = false;
+                  $scope.modalClientMembersSearch.data = response.data;
+                  $scope.modalClientMembersSearch.gridOptions.enableFiltering = true;
+                  $scope.modalClientMembersSearch.clientsAreLoading = false;
 
                 }, function(error){
-                  $scope.modalClientsSearch.clientsAreLoading = false;
+                  $scope.modalClientMembersSearch.clientsAreLoading = false;
                   console.log(error);
                 })
 
                 // --> Termina F2 en affiliates
 
                 $scope.ok = function() {
-                  if (!$scope.modalClientsSearch.selectedRow) {
-                    toastr.warning('Debe seleccionar al menos un cliente');
+                  if (!$scope.modalClientMembersSearch.selectedRow) {
+                    toastr.warning('Debe seleccionar un integrante');
                     return;
                   }
 
-                  vm.incService.incident.affiliateNumber = $scope.modalClientsSearch.selectedRow.entity.NroAfiliado;
+                  vm.incService.incident.affiliateNumber = $scope.modalClientMembersSearch.selectedRow.entity.NroAfiliado;
                   validateAffiliate();
                   $modalInstance.close();
                 };
@@ -310,7 +326,6 @@
 
               $scope.modalSymptomsSearch.gridOptions =  {
                 data: 'modalSymptomsSearch.data',
-                selectedItems : $scope.modalSymptomsSearch.selectedItems,
                 columnDefs: [
                   { displayName: 'Descripción', field: 'descripcion' }],
                   enableRowSelection: true,
@@ -333,7 +348,7 @@
 
                 $scope.ok = function() {
                   if (!$scope.modalSymptomsSearch.selectedRow) {
-                    toastr.warning('Debe seleccionar al menos un síntoma');
+                    toastr.warning('Debe seleccionar un síntoma');
                     return;
                   }
 
@@ -349,5 +364,134 @@
             });
 
           }
-        }
-      })();
+
+          // --> Popup busqueda de sintomas
+          function showClientsSearchModal() {
+            $modal.open({
+              templateUrl: 'clients-search-modal.html',
+              controller: function($scope, $modalInstance) {
+
+                $scope.modalClientsSearch                             = {};
+                $scope.modalClientsSearch.selectedRow                 = null;
+                $scope.modalClientsSearch.data                        = [];
+
+                $scope.modalClientsSearch.gridOptions =  {
+                  data: 'modalClientsSearch.data',
+                  columnDefs: [
+                    { displayName: 'Razón Social', field: 'razonSocial' }],
+                    enableRowSelection: true,
+                    enableRowHeaderSelection: false,
+                    multiSelect: false,
+                    modifierKeysToMultiSelect : true,
+                    noUnselect: true,
+                    showFooter: false,
+                    enableFiltering: true,
+                    showFilter: true,
+                    flatEntityAccess: true,
+                    fastWatch: true,
+                    enableHorizontalScrollbar : uiGridConstants.scrollbars.NEVER,
+                    onRegisterApi : function(gridApi) {
+                      $scope.gridApi = gridApi;
+
+                      $scope.gridApi.selection.on.rowSelectionChanged($scope, function(row){
+                        $scope.modalClientsSearch.selectedRow = row;
+                      });
+                    }
+                  };
+
+                  ClientsService.getAll()
+                  .then(function(response){
+                    $scope.modalClientsSearch.data = UtilsService.toCamel(response.data);
+                    console.log($scope.modalClientsSearch.data);
+                  }, function(error){
+                    console.log(error);
+                  });
+
+                  $scope.ok = function() {
+                    if (!$scope.modalClientsSearch.selectedRow) {
+                      toastr.warning('Debe seleccionar un integrante');
+                      return;
+                    }
+
+                    vm.incService.incident.client = $scope.modalClientsSearch.selectedRow.entity.abreviaturaId;
+                    vm.validateClient();
+                    $modalInstance.close();
+                  };
+
+                  $scope.cancel = function() {
+                    $modalInstance.dismiss('cancel');
+                  };
+                },
+                size: 'lg'
+              });
+
+            }
+
+            function showClientMembersAllModal() {
+              $modal.open({
+                templateUrl: 'client-members-all-search-modal.html',
+                controller: function($scope, $modalInstance) {
+
+                  $scope.modalClientMembersAllSearch                             = {};
+                  $scope.modalClientMembersAllSearch.selectedRow                 = null;
+                  $scope.modalClientMembersAllSearch.data                        = [];
+
+                  $scope.modalClientMembersAllSearch.gridOptions =  {
+                    data: 'modalClientMembersAllSearch.data',
+                    columnDefs: [
+                      { displayName: 'Cliente', field: 'abreviaturaId' },
+                      { displayName: 'Nro. Afiliado', field: 'nroAfiliado' },
+                      { displayName: 'Tipo', field: 'tipoIntegrante' },
+                      { displayName: 'Apellido', field: 'apellido' },
+                      { displayName: 'Nombre', field: 'nombre' },
+                      { displayName: 'Documento', field: 'documento' }],
+                      enableRowSelection: true,
+                      enableRowHeaderSelection: false,
+                      multiSelect: false,
+                      modifierKeysToMultiSelect : true,
+                      noUnselect: true,
+                      showFooter: false,
+                      enableFiltering: true,
+                      showFilter: true,
+                      flatEntityAccess: true,
+                      fastWatch: true,
+                      enableHorizontalScrollbar : uiGridConstants.scrollbars.NEVER,
+                      onRegisterApi : function(gridApi) {
+                        $scope.gridApi = gridApi;
+
+                        $scope.gridApi.selection.on.rowSelectionChanged($scope, function(row){
+                          $scope.modalClientMembersAllSearch.selectedRow = row;
+                        });
+                      }
+                    };
+
+                    ClientsService.getAllActiveMembers()
+                    .then(function(response){
+                      $scope.modalClientMembersAllSearch.data = UtilsService.toCamel(response.data);
+                    }, function(error){
+                      console.log(error);
+                    });
+
+                    $scope.ok = function() {
+                      if (!$scope.modalClientMembersAllSearch.selectedRow) {
+                        toastr.warning('Debe seleccionar un integrante');
+                        return;
+                      }
+
+                      vm.incService.incident.client = $scope.modalClientMembersAllSearch.selectedRow.entity.abreviaturaId;
+                      vm.incService.incident.affiliateNumber = $scope.modalClientMembersAllSearch.selectedRow.entity.nroAfiliado;
+                      vm.validateClient();
+                      vm.validateAffiliate();
+                      $modalInstance.close();
+                    };
+
+                    $scope.cancel = function() {
+                      $modalInstance.dismiss('cancel');
+                    };
+                  },
+                  size: 'lg'
+                });
+
+              }
+            }
+          })();

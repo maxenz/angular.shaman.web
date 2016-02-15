@@ -27,6 +27,14 @@
       return $http.get(shamanConfiguration.url + 'api/clients/GetMembersByClient?client=' + client);
     }
 
+    function getAll() {
+      return UtilsService.getPromise('api/clients/getall');
+    }
+
+    function getAllActiveMembers() {
+      return UtilsService.getPromise('api/clients/getallclientmembers');
+    }
+
     function setPlans(plans) {
       service.planOptions = [];
       var data = UtilsService.toCamel(plans);
@@ -41,6 +49,8 @@
       getAffiliateWithValidation : getAffiliateWithValidation,
       getClientMembersByClient   : getClientMembersByClient,
       setPlans                   : setPlans,
+      getAll                     : getAll,
+      getAllActiveMembers        : getAllActiveMembers,
       planOptions                : []
 
     };
