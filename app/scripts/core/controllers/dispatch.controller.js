@@ -252,9 +252,6 @@
                   $scope.colDefs[3].displayName = columns[3].displayName;
                 }
 
-
-
-
                 $scope.ok = function() {
                   // if (!$scope.modalSymptomsSearch.selectedRow) {
                   //   toastr.warning('Debe seleccionar al menos un síntoma');

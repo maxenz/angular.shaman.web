@@ -43,7 +43,7 @@ function($rootScope, $location, $cookieStore, $http, SettingsService, UtilsServi
     SettingsService.setIvaSituations(UtilsService.toCamel(response.ivaSituations.data));
     SettingsService.setSymptoms(UtilsService.toCamel(response.symptoms.data));
 
-    $http.defaults.headers.post['Content-Type'] = 'application/json';
+     $http.defaults.headers.post['Content-Type'] = 'application/json';
 
     $rootScope.globals = $cookieStore.get('globals') || {};
     if ($rootScope.globals.currentUser) {

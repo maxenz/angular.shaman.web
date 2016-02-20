@@ -3,11 +3,12 @@ angular
   .controller('NotificationsController', ['$scope', '$filter', function($scope, $filter) {
     'use strict';
     $scope.notifications = [{
-      text: 'Server #1 is live',
-      time: '4m',
+      text: 'Visualización del mapa',
+      time: '',
       class: 'notification-success',
-      iconClasses: 'glyphicon glyphicon-ok',
-      seen: true
+      iconClasses: 'glyphicon glyphicon-globe',
+      seen: true,
+      model: 'mapService.seeMap'
     }, {
       text: 'New user Registered',
       time: '10m',

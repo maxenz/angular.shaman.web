@@ -94,7 +94,12 @@
       }
 
       function saveIncident() {
-        //console.log('puto');
+
+        IncidentService.saveIncident(vm.incService.incident)
+          .then(function(response){
+            console.log(response.data);
+          });
+
       }
 
       function cancelIncident() {

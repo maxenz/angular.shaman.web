@@ -6,9 +6,10 @@
   .module('theme.core.services')
   .factory('IncidentService', IncidentService)
 
-  IncidentService.$inject = [ '$http', '$rootScope', 'shamanConfiguration', 'UtilsService', 'SettingsService', 'ClientsService'];
+  IncidentService.$inject = [ '$http', '$rootScope', 'shamanConfiguration', 'UtilsService', 'SettingsService', 'ClientsService',
+'$log'];
   /* jshint ignore:start */
-  function IncidentService($http, $rootScope, shamanConfiguration, UtilsService, SettingsService, ClientsService) {
+  function IncidentService($http, $rootScope, shamanConfiguration, UtilsService, SettingsService, ClientsService, $log) {
 
     function getAll() {
       return $http.get(shamanConfiguration.url + 'api/incidents/GetAll');
@@ -50,7 +51,7 @@
       service.incident.symptoms                     = incident.sintomas;
 
       if (incident.gradoOperativo) {
-        service.incident.operativeGradeSelected       = UtilsService.getObjectByPropertyInArray(SettingsService.operativeGradeOptions, 'label', incident.gradoOperativo.descripcion);
+        service.incident.operativeGradeSelected     = UtilsService.getObjectByPropertyInArray(SettingsService.operativeGradeOptions, 'label', incident.gradoOperativo.descripcion);
       }
 
       service.incident.sexSelected                  = UtilsService.getObjectByPropertyInArray(SettingsService.sexOptions, 'label', incident.sexo);
@@ -85,6 +86,18 @@
       return $http.get(shamanConfiguration.url + 'api/incidents/getFirst');
     }
 
+    function saveIncident(incident) {
+
+      $log.log(incident);
+
+      return $http({
+        method : 'POST',
+        url : shamanConfiguration.url +
+        'api/incidents/saveincident',
+        data: JSON.stringify(incident)
+      });
+    }
+
     var service = {
       incident                     : {},
       getAll                       : getAll,
@@ -96,7 +109,8 @@
       getLast                      : getLast,
       getPrevious                  : getPrevious,
       getNext                      : getNext,
-      getFirst                     : getFirst
+      getFirst                     : getFirst,
+      saveIncident                 : saveIncident
     };
 
     return service;

@@ -49,46 +49,28 @@ ng-class="{
 
 	<li class="dropdown" dropdown ng-controller="NotificationsController" ng-show="isLoggedIn">
 		<a href dropdown-toggle class="dropdown-toggle">
-			<i class="glyphicon glyphicon-globe"></i><span class="badge badge-indigo" ng-if="unseenCount>0" ng-bind="unseenCount"></span>
+			<i class="glyphicon glyphicon-cog"></i>
 		</a>
 		<ul class="dropdown-menu animated notifications arrow">
 			<li class="dd-header">
-				<span>Notifications ({{unseenCount}})</span>
-				<span><a href="#"><i class="glyphicon glyphicon-cog"></i></a></span>
+				<span style="float:left !important;">Configuraciones</span>
 			</li>
 			<div class="scrollthis" scrollable>
-				<li ng-repeat="item in notifications">
-					<a href="#" class="{{item.class}}" ng-class="{active: !item.seen}">
-						<button tooltip-placement="top" tooltip-append-to-body="true" tooltip="Mark seen" class="btn-mark-read" ng-if="!item.seen" ng-click="setSeen(item, $event)"><i class="glyphicon glyphicon-unchecked"></i></button>
-						<button tooltip-placement="top" tooltip-append-to-body="true" tooltip="Mark unseen" class="btn-mark-unread" ng-if="item.seen" ng-click="setUnseen(item, $event)"><i class="glyphicon glyphicon-check"></i></button>
-						<span class="time">{{item.time}}</span>
-						<i class="{{item.iconClasses}}"></i>
-						<span class="msg">{{item.text}}</span>
+				<li>
+					<a href="#" class="notification-success">
+						<div style="float:right">
+							<input type="checkbox" icheck ng-model="mapService.seeMap" />
+						</div>
+						<i class="fa fa-globe"></i>
+						<span class="msg">Visualización del mapa</span>
 					</a>
 				</li>
 			</div>
-			<li class="dd-footer"><a href="javascript:;" ng-click="setSeenAll($event)">Mark all seen</a></li>
 		</ul>
 	</li>
 	<li class="visible-xs-block">
 		<a href="#" ng-click="toggleSearchBar($event)"><i class="glyphicon glyphicon-search"></i></a>
 	</li>
 
-	<li class="dropdown demodrop" dropdown>
-		<a href dropdown-toggle class="dropdown-toggle tooltips"><i class="glyphicon glyphicon-cog"></i></a>
-		<ul class="dropdown-menu animated arrow dropdown-menu-form" id="demo-dropdown">
-
-			<div class="tabular">
-				<div class="tabular-row">
-					<div class="tabular-cell">
-						<label for="seeMap">Mapa</label>
-						<div ng-click="$event.stopPropagation()">
-							<input type="checkbox" ng-model="mapService.seeMap" class="js-switch" ui-switch="{color: '#7dcc93', secondaryColor: '#c5cbd1'}" />
-						</div>
-					</div>
-				</div>
-			</div>
-		</ul>
-	</li>
 </ul>
 </header>
