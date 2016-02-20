@@ -18,7 +18,6 @@
 
       vm.incService = IncidentService;
       vm.cliService = ClientsService;
-      console.log(vm.incService.incident);
 
       vm.incService.incident.sexSelected            = vm.sexOptions[0];
       vm.incService.incident.operativeGradeSelected = vm.operativeGradeOptions[0];
@@ -97,7 +96,13 @@
 
         IncidentService.saveIncident(vm.incService.incident)
           .then(function(response){
-            console.log(response.data);
+            var data = UtilsService.toCamel(response.data);
+            if (data.isValid) {
+              toastr.success('El incidente ha sido generado con éxito.');
+              //demas acciones
+            } else {
+              toastr.error('El incidente no pudo guardarse debido a lo siguiente: ' + data.errors);
+            }
           });
 
       }

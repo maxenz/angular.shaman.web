@@ -59,7 +59,7 @@
             <button class="btn btn-social btn-apple" ng-disabled="receptionCtrl.buttonsDisabled"><i class="fa fa-print"></i></button></li>
           </ul>
 
-          <form name="receptionForm" class="reception-form" novalidate>
+          <form name="receptionForm" ng-submit="receptionCtrl.saveIncident()" class="reception-form" novalidate>
             <div class="row">
 
               <div class="col-xs-3">
@@ -82,16 +82,16 @@
               </div>
 
               <div class="col-xs-2">
-                <div class="form-group">
+                <div class="form-group" ng-class="{ 'has-error': receptionForm.phoneNumber.$touched && receptionForm.phoneNumber.$invalid }">
                   <label for="#" class="control-label">Telefono</label>
-                  <input class="form-control" type="text" placeholder="Teléfono" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.phoneNumber" ng-blur="receptionCtrl.getDataByPhone()" />
+                  <input class="form-control" type="text" name="phoneNumber" placeholder="Teléfono" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.phoneNumber" ng-blur="receptionCtrl.getDataByPhone()" required />
                 </div>
               </div>
 
               <div class="col-xs-2">
-                <div class="form-group">
+                <div class="form-group"  ng-class="{ 'has-error': receptionForm.client.$touched && receptionForm.client.$invalid }">
                   <label for="#" class="control-label">Cliente</label>
-                  <input class="form-control" type="text" placeholder="Cliente" ng-keydown="receptionCtrl.clientsKeyPress($event.keyCode)" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.client" ng-blur="receptionCtrl.validateClient()" />
+                  <input class="form-control" type="text" name="client" placeholder="Cliente" ng-keydown="receptionCtrl.clientsKeyPress($event.keyCode)" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.client" ng-blur="receptionCtrl.validateClient()" required />
                 </div>
               </div>
 
@@ -114,23 +114,23 @@
             <div class="row">
 
               <div class="col-xs-2">
-                <div class="form-group">
+                <div class="form-group"  ng-class="{ 'has-error': receptionForm.locality.$touched && receptionForm.locality.$invalid }">
                   <label for="#" class="control-label">Localidad</label>
-                  <input class="form-control" type="text" placeholder="Localidad" ng-blur="receptionCtrl.validateLocality()" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.locAbreviature" />
+                  <input class="form-control" type="text" placeholder="Localidad" name="locality" ng-blur="receptionCtrl.validateLocality()" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.locAbreviature" required/>
                 </div>
               </div>
 
               <div class="col-xs-5">
                 <div class="form-group">
                   <label for="#" class="control-label">Descripcion de la localidad</label>
-                  <input class="form-control" type="text" ng-disabled="true" placeholder="Descripcion de la localidad" ng-model="receptionCtrl.incService.incident.locality" />
+                  <input class="form-control" type="text" ng-disabled="true" placeholder="Descripcion de la localidad" ng-model="receptionCtrl.incService.incident.locality" required />
                 </div>
               </div>
 
               <div class="col-xs-5">
                 <div class="form-group">
                   <label for="#" class="control-label">Partido</label>
-                  <input class="form-control" type="text" placeholder="Partido" ng-disabled="true" ng-model="receptionCtrl.incService.incident.partido" />
+                  <input class="form-control" type="text" placeholder="Partido" ng-disabled="true" ng-model="receptionCtrl.incService.incident.partido" required />
                 </div>
               </div>
 
@@ -138,9 +138,9 @@
 
             <div class="row">
               <div class="col-xs-6">
-                <div class="form-group">
+                <div class="form-group" ng-class="{ 'has-error': receptionForm.street.$touched && receptionForm.street.$invalid }">
                   <label for="#" class="control-label">Domicilio</label>
-                  <input class="form-control" type="text" placeholder="Domicilio" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.domicile.street" />
+                  <input class="form-control" type="text" placeholder="Domicilio" name="street" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.domicile.street" required />
                 </div>
               </div>
               <div class="col-xs-2">
@@ -224,9 +224,9 @@
             <div class="row">
 
               <div class="col-xs-6">
-                <div class="form-group">
+                <div class="form-group" ng-class="{ 'has-error': receptionForm.patient.$touched && receptionForm.patient.$invalid }" >
                   <label for="#" class="control-label">Paciente</label>
-                  <input class="form-control" ng-disabled="receptionCtrl.incService.incident.inputBlocked" type="text" placeholder="Paciente" ng-model="receptionCtrl.incService.incident.patient" />
+                  <input class="form-control" name="patient" ng-disabled="receptionCtrl.incService.incident.inputBlocked" type="text" placeholder="Paciente" ng-model="receptionCtrl.incService.incident.patient" required />
                 </div>
               </div>
               <div class="col-xs-2">
@@ -285,7 +285,7 @@
             <hr/>
             <div class="row">
               <div class="btn-group" role="group" aria-label="..." style="float:right">
-                <button class="btn btn-primary" ng-hide="receptionCtrl.incService.incident.inputBlocked" ng-click="receptionCtrl.saveIncident()">Guardar cambios</button>
+                <button class="btn btn-primary" type="submit" ng-hide="receptionCtrl.incService.incident.inputBlocked" ng-disabled="receptionForm.$invalid">Guardar cambios</button>
                 <button class="btn btn-danger" ng-hide="receptionCtrl.incService.incident.inputBlocked" ng-click="receptionCtrl.cancelIncident()">Cancelar</button>
               </div>
             </div>

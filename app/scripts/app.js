@@ -36,6 +36,8 @@ angular
 function($rootScope, $location, $cookieStore, $http, SettingsService, UtilsService){
   'use strict';
 
+  $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
   SettingsService.setInitialSettings()
   .then(function(response){
 
@@ -43,11 +45,9 @@ function($rootScope, $location, $cookieStore, $http, SettingsService, UtilsServi
     SettingsService.setIvaSituations(UtilsService.toCamel(response.ivaSituations.data));
     SettingsService.setSymptoms(UtilsService.toCamel(response.symptoms.data));
 
-     $http.defaults.headers.post['Content-Type'] = 'application/json';
-
     $rootScope.globals = $cookieStore.get('globals') || {};
     if ($rootScope.globals.currentUser) {
-      $http.defaults.headers.common['Authorization'] = 'Basic' + $rootScope.globals.currentUser.authdata;
+      //$http.defaults.headers.common['Authorization'] = 'Basic' + $rootScope.globals.currentUser.authdata;
     }
 
     $rootScope.$on('$locationChangeStart', function(event, next, current){

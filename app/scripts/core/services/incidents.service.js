@@ -7,7 +7,7 @@
   .factory('IncidentService', IncidentService)
 
   IncidentService.$inject = [ '$http', '$rootScope', 'shamanConfiguration', 'UtilsService', 'SettingsService', 'ClientsService',
-'$log'];
+  '$log'];
   /* jshint ignore:start */
   function IncidentService($http, $rootScope, shamanConfiguration, UtilsService, SettingsService, ClientsService, $log) {
 
@@ -94,7 +94,7 @@
         method : 'POST',
         url : shamanConfiguration.url +
         'api/incidents/saveincident',
-        data: JSON.stringify(incident)
+        data: $.param(incident)
       });
     }
 

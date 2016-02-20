@@ -13,7 +13,7 @@
 
     function login(username, password) {
       return $http.post(shamanConfiguration.url + 'api/authenticate',
-      JSON.stringify({
+      $.param({
         username : username,
         password : password
       })
@@ -30,7 +30,7 @@
       }
     };
 
-    $http.defaults.headers.common['Authorization'] = 'Basic' + authdata;
+    //$http.defaults.headers.common['Authorization'] = 'Basic' + authdata;
     $cookieStore.put('globals', $rootScope.globals);
 
   }

@@ -12,6 +12,7 @@ angular
     'ui.bootstrap',
     'ui.select',
     'toastr',
+    'ngMessages',
     'ui.grid',
     'ui.grid.edit',
     'ui.grid.selection',
