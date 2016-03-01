@@ -48,7 +48,9 @@
       service.incident.domicile.department          = incident.domicilio.department;
       service.incident.domicile.betweenFirstStreet  = incident.domicilio.betweenStreet1;
       service.incident.domicile.betweenSecondStreet = incident.domicilio.betweenStreet2;
+      service.incident.domicile.reference           = incident.domicilio.reference;
       service.incident.symptoms                     = incident.sintomas;
+      service.incident.observations                 = incident.observaciones;
 
       if (incident.gradoOperativo) {
         service.incident.operativeGradeSelected     = UtilsService.getObjectByPropertyInArray(SettingsService.operativeGradeOptions, 'label', incident.gradoOperativo.descripcion);

@@ -153,6 +153,7 @@
 
                 $scope.dispatch                    = {};
                 $scope.dispatch.incident           = {};
+                $scope.dispatch.incident.id        = incident.id;
                 $scope.dispatch.incident.number    = incident.nroIncidente;
                 $scope.dispatch.incident.grade     = incident.abreviaturaId;
                 $scope.dispatch.incident.domicile  = incident.domicilio;
@@ -167,26 +168,21 @@
                 $scope.ctxDispatchGrid             = {};
                 $scope.ctxDispatchGrid.gridOptions = {};
                 $scope.ctxDispatchGrid.selectedRow = null;
+                $scope.dispatch.changeDispatchOption = changeDispatchOption;
 
-                $scope.mobileColDefs = [
+                var colDefs = [
                   { displayName: 'id', field: 'id', visible: false},
                   { displayName: 'Móvil', field: 'movil'},
                   { displayName: 'Tipo de Móvil', field: 'tipoMovil'},
                   { displayName: 'Estado', field: 'estado'}
                 ];
 
-                $scope.companyColDefs = [
-                  { displayName: 'id', field: 'id', visible: false},
-                  { displayName: 'Empresa', field: 'movil'},
-                  { displayName: 'Nombre', field: 'tipoMovil'},
-                  { displayName: 'Tipo de Cobertura', field: 'estado'}
-                ];
-
-                $scope.colDefs = $scope.mobileColDefs;
+                var mobileColTitles = ['ID', 'Móvil','Tipo de Móvil', 'Estado'];
+                var companyColTitles = ['ID', 'Empresa', 'Nombre', 'Tipo de Cobertura'];
 
                 $scope.ctxDispatchGrid.gridOptions =  {
                   data: [],
-                  columnDefs: $scope.colDefs,
+                  columnDefs: colDefs,
                   enableRowSelection: true,
                   enableRowHeaderSelection: false,
                   multiSelect: false,
@@ -198,6 +194,8 @@
                   enableHorizontalScrollbar : uiGridConstants.scrollbars.NEVER,
                   onRegisterApi : function(gridApi) {
                     $scope.gridApi = gridApi;
+                    $scope.dispatch.dispatchingOptionSelected = $scope.dispatch.dispatchingOptions[0];
+                    changeDispatchOption();
                     $scope.gridApi.selection.on.rowSelectionChanged($scope, function(row){
                       $scope.ctxDispatchGrid.selectedRow = row;
                       $scope.dispatch.bottomPanelFirstField = row.entity.movil;
@@ -206,11 +204,6 @@
                     });
                   }
                 };
-
-                $scope.dispatch.dispatchingOptionSelected = $scope.dispatch.dispatchingOptions[0];
-                changeDispatchOption();
-
-                $scope.dispatch.changeDispatchOption = changeDispatchOption;
 
                 function changeDispatchOption() {
                   switch ($scope.dispatch.dispatchingOptionSelected.id) {
@@ -234,9 +227,9 @@
 
                 function setDispatchGridData() {
                   if ($scope.dispatch.dispatchingOptionSelected.id === 0) {
-                    setColumnNames($scope.mobileColDefs);
+                    setColumnNames(mobileColTitles);
                   } else {
-                    setColumnNames($scope.companyColDefs);
+                    setColumnNames(companyColTitles);
                   }
 
                   DispatchService
@@ -247,18 +240,26 @@
                 }
 
                 function setColumnNames(columns) {
-                  $scope.colDefs[1].displayName = columns[1].displayName;
-                  $scope.colDefs[2].displayName = columns[2].displayName;
-                  $scope.colDefs[3].displayName = columns[3].displayName;
+                  colDefs[1].displayName = columns[1];
+                  colDefs[2].displayName = columns[2];
+                  colDefs[3].displayName = columns[3];
                 }
 
                 $scope.ok = function() {
-                  // if (!$scope.modalSymptomsSearch.selectedRow) {
-                  //   toastr.warning('Debe seleccionar al menos un síntoma');
-                  //   return;
-                  // }
-                  //
-                  // $scope.incService.incident.symptoms = $scope.modalSymptomsSearch.selectedRow.entity.descripcion;
+                  if (!$scope.ctxDispatchGrid.selectedRow) {
+                    toastr.error('Debe seleccionar al menos una sugerencia.');
+                    return;
+                  }
+
+                  DispatchService
+                  .dispatch($scope.dispatch.incident, $scope.ctxDispatchGrid.selectedRow)
+                  .then(function(response){
+                    var data = UtilsService.toCamel(response.data);
+                    $log.log(data);
+                  }, function(error){
+                    $log.log(error);
+                  });
+
                   $modalInstance.close();
                 };
 

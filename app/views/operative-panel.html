@@ -183,7 +183,7 @@
               <div class="col-xs-4">
                 <div class="form-group">
                   <label for="#" class="control-label">Referencias</label>
-                  <input class="form-control" type="text" placeholder="Referencias" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.references" />
+                  <input class="form-control" type="text" placeholder="Referencias" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.domicile.reference" />
                 </div>
               </div>
 
@@ -280,6 +280,13 @@
                 </div>
               </div>
 
+            </div>
+
+            <div class="row">
+              <div class="form-group">
+                <label for="#" class="control-label">Observaciones</label>
+                <textarea  class="form-control" ng-disabled="receptionCtrl.incService.incident.inputBlocked" placeholder="Observaciones..." rows="3" ng-model="receptionCtrl.incService.incident.observations"></textarea>
+              </div>
             </div>
 
             <hr/>
