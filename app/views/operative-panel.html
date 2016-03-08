@@ -96,9 +96,9 @@
               </div>
 
               <div class="col-xs-2">
-                <div class="form-group">
+                <div class="form-group" ng-class="{ 'has-error': receptionForm.affiliateNumber.$touched && receptionForm.affiliateNumber.$invalid }">
                   <label for="#" class="control-label">Nro. Afiliado</label>
-                  <input class="form-control" type="text" ng-keyup="receptionCtrl.affiliateKeyPress($event.keyCode)"  placeholder="Nro. de afiliado" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.affiliateNumber" ng-blur="receptionCtrl.validateAffiliate()" />
+                  <input class="form-control" type="text" name="affiliateNumber" ng-keyup="receptionCtrl.affiliateKeyPress($event.keyCode)"  placeholder="Nro. de afiliado" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-model="receptionCtrl.incService.incident.affiliateNumber" ng-blur="receptionCtrl.validateAffiliate()" />
                 </div>
               </div>
 

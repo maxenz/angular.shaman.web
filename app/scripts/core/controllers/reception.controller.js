@@ -95,15 +95,15 @@
       function saveIncident() {
 
         IncidentService.saveIncident(vm.incService.incident)
-          .then(function(response){
-            var data = UtilsService.toCamel(response.data);
-            if (data.isValid) {
-              toastr.success('El incidente ha sido generado con éxito.');
-              //demas acciones
-            } else {
-              toastr.error('El incidente no pudo guardarse debido a lo siguiente: ' + data.errors);
-            }
-          });
+        .then(function(response){
+          var data = UtilsService.toCamel(response.data);
+          if (data.isValid) {
+            toastr.success('El incidente ha sido generado con éxito.');
+            //demas acciones
+          } else {
+            toastr.error('El incidente no pudo guardarse debido a lo siguiente: ' + data.errors);
+          }
+        });
 
       }
 
@@ -166,6 +166,7 @@
               $bootbox.confirm('¿El paciente es ' + data.paciente + '?', function(result) {
                 if (result) {
                   IncidentService.setIncident(data);
+                  IncidentService.incident.incDate =  moment().format("DD/MM/YYYY");
                 }
               });
             }

@@ -9,6 +9,7 @@ angular
 })
 .config(['$provide', '$routeProvider', function($provide, $routeProvider) {
   'use strict';
+
   $routeProvider
   .when('/', {
     templateUrl: 'views/operative-panel.html',

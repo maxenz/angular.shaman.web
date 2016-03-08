@@ -4,11 +4,40 @@
   .module('theme.core.dispatch_controller', ['ngGrid'])
   .controller('dispatchController', dispatchController);
 
-  dispatchController.$inject = ['$scope', '$filter', '$theme', 'MobileService', 'IncidentService', '$log',
-  'UtilsService', 'uiGridConstants', 'MapService', '$modal','DispatchService', 'toastr'];
-  function dispatchController($scope, $filter, $theme, MobileService, IncidentService, $log,
-    UtilsService, uiGridConstants, MapService, $modal, DispatchService, toastr) {
+  dispatchController.$inject = [
+    '$scope',
+    '$filter',
+    '$theme',
+    'MobileService',
+    'IncidentService',
+    '$log',
+    'UtilsService',
+    'uiGridConstants',
+    'MapService',
+    '$modal',
+    'DispatchService',
+    'toastr',
+    '$interval'];
+
+    function dispatchController(
+      $scope,
+      $filter,
+      $theme,
+      MobileService,
+      IncidentService,
+      $log,
+      UtilsService,
+      uiGridConstants,
+      MapService,
+      $modal,
+      DispatchService,
+      toastr,
+      $interval
+    ) {
+
       'use strict';
+
+      var operativeTimer;
 
       var vm                      = this;
       vm.data                     = {};
@@ -71,7 +100,7 @@
           columnDefs: [
             { displayName: 'IncidenteId', field: 'IncidenteId', visible: false },
             { displayName: 'incidenteViajeId', field: 'id', visible: false},
-            { displayName: 'Gdo', field: 'abreviaturaId', width: '6%' },
+            { displayName: 'Gdo', field: 'grado', width: '6%' },
             { displayName: 'Cli.', field: 'cliente' , width: '6%'},
             { displayName: 'Nro', field: 'nroIncidente' , width: '5%'},
             { displayName: 'Domic.', field: 'domicilio' , width: '10%'},
@@ -108,6 +137,7 @@
                   IncidentService.setIncident(UtilsService.toCamel(response.data));
                   MapService.setMarker(row.entity.dmLatitud, row.entity.dmLongitud);
                   vm.selectedIncident = row.entity;
+                  console.log(vm.selectedIncident);
                 })
               });
             }
@@ -119,6 +149,12 @@
           function activate() {
             loadIncidents();
             loadMobiles();
+
+            operativeTimer = $interval(function() {
+              loadIncidents();
+              loadMobiles();
+            }, 10000);
+
           }
 
           function loadMobiles() {
@@ -157,7 +193,7 @@
                 $scope.dispatch.incident.id               = incident.incidenteId;
                 $scope.dispatch.incident.travelIncidentId = incident.id;
                 $scope.dispatch.incident.number           = incident.nroIncidente;
-                $scope.dispatch.incident.grade            = incident.abreviaturaId;
+                $scope.dispatch.incident.grade            = incident.grado;
                 $scope.dispatch.incident.domicile         = incident.domicilio;
                 $scope.dispatch.incident.locality         = incident.localidad;
                 $scope.dispatch.incident.incDate          = moment(incident.horLlamada.split(' ')[0], "DD/MM/YYYY")._i;
@@ -266,7 +302,7 @@
                     }
                     $log.log(data);
                   }, function(error){
-                      toastr.error(error)
+                    toastr.error(error)
                   });
 
                 };

@@ -62,7 +62,8 @@
     "angular-toastr": "~1.6.0",
     "angular-modal-service": "~0.6.9",
     "angular-bootstrap-contextmenu": "~0.9.6",
-    "angular-messages": "~1.5.0"
+    "angular-messages": "~1.5.0",
+    "angular-block-ui": "~0.2.2"
   },
   "resolutions": {
     "jquery": "~1.11.0",

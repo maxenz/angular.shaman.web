@@ -4,8 +4,28 @@
   .module('theme.core.login_controller', [])
   .controller('loginController', loginController);
 
-  loginController.$inject = ['$scope', '$filter', '$theme', '$rootScope', '$location', 'AuthenticationService', 'SettingsService', 'UtilsService'];
-  function loginController($scope, $filter, $theme, $rootScope, $location, AuthenticationService, SettingsService, UtilsService) {
+  loginController.$inject = [
+    '$scope',
+    '$filter',
+    '$theme',
+    '$rootScope',
+    '$location',
+    'AuthenticationService',
+    'SettingsService',
+    'UtilsService'
+  ];
+
+  function loginController(
+    $scope,
+    $filter,
+    $theme,
+    $rootScope,
+    $location,
+    AuthenticationService,
+    SettingsService,
+    UtilsService
+  ) {
+
     'use strict';
 
     $scope.data = {};
@@ -26,7 +46,6 @@
       .then(function(data){
         AuthenticationService.setCredentials($scope.data.username, $scope.data.password);
         $location.path('/operative-panel');
-
 
       }, function(error){
         switch (error.status) {
