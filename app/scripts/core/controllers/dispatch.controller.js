@@ -5,9 +5,9 @@
   .controller('dispatchController', dispatchController);
 
   dispatchController.$inject = ['$scope', '$filter', '$theme', 'MobileService', 'IncidentService', '$log',
-  'UtilsService', 'uiGridConstants', 'MapService', '$modal','DispatchService'];
+  'UtilsService', 'uiGridConstants', 'MapService', '$modal','DispatchService', 'toastr'];
   function dispatchController($scope, $filter, $theme, MobileService, IncidentService, $log,
-    UtilsService, uiGridConstants, MapService, $modal, DispatchService) {
+    UtilsService, uiGridConstants, MapService, $modal, DispatchService, toastr) {
       'use strict';
 
       var vm                      = this;
@@ -70,6 +70,7 @@
           data: [],
           columnDefs: [
             { displayName: 'IncidenteId', field: 'IncidenteId', visible: false },
+            { displayName: 'incidenteViajeId', field: 'id', visible: false},
             { displayName: 'Gdo', field: 'abreviaturaId', width: '6%' },
             { displayName: 'Cli.', field: 'cliente' , width: '6%'},
             { displayName: 'Nro', field: 'nroIncidente' , width: '5%'},
@@ -151,23 +152,23 @@
               templateUrl: 'dispatch-modal.html',
               controller: function($scope, $modalInstance) {
 
-                $scope.dispatch                    = {};
-                $scope.dispatch.incident           = {};
-                $scope.dispatch.incident.id        = incident.id;
-                $scope.dispatch.incident.number    = incident.nroIncidente;
-                $scope.dispatch.incident.grade     = incident.abreviaturaId;
-                $scope.dispatch.incident.domicile  = incident.domicilio;
-                $scope.dispatch.incident.locality  = incident.localidad;
-                $scope.dispatch.incident.incDate   = moment(incident.horLlamada.split(' ')[0]).format("DD/MM/YYYY");
+                $scope.dispatch                           = {};
+                $scope.dispatch.incident                  = {};
+                $scope.dispatch.incident.id               = incident.incidenteId;
+                $scope.dispatch.incident.travelIncidentId = incident.id;
+                $scope.dispatch.incident.number           = incident.nroIncidente;
+                $scope.dispatch.incident.grade            = incident.abreviaturaId;
+                $scope.dispatch.incident.domicile         = incident.domicilio;
+                $scope.dispatch.incident.locality         = incident.localidad;
+                $scope.dispatch.incident.incDate          = moment(incident.horLlamada.split(' ')[0], "DD/MM/YYYY")._i;
                 $scope.dispatch.dispatchingOptions = [
                   {id: 0, label: 'Móviles'},
                   {id: 1, label: 'Empresas Prestadoras'},
-                  {id: 2, label: 'Internador Domiciliario'}
+                  {id: 2, label: 'Visitadores'}
                 ];
 
                 $scope.ctxDispatchGrid             = {};
                 $scope.ctxDispatchGrid.gridOptions = {};
-                $scope.ctxDispatchGrid.selectedRow = null;
                 $scope.dispatch.changeDispatchOption = changeDispatchOption;
 
                 var colDefs = [
@@ -197,10 +198,10 @@
                     $scope.dispatch.dispatchingOptionSelected = $scope.dispatch.dispatchingOptions[0];
                     changeDispatchOption();
                     $scope.gridApi.selection.on.rowSelectionChanged($scope, function(row){
-                      $scope.ctxDispatchGrid.selectedRow = row;
-                      $scope.dispatch.bottomPanelFirstField = row.entity.movil;
+                      $scope.dispatch.selectedRow            = row;
+                      $scope.dispatch.bottomPanelFirstField  = row.entity.movil;
                       $scope.dispatch.bottomPanelSecondField = row.entity.tipoMovil;
-                      $scope.dispatch.bottomPanelThirdField = row.entity.estado;
+                      $scope.dispatch.bottomPanelThirdField  = row.entity.estado;
                     });
                   }
                 };
@@ -208,16 +209,16 @@
                 function changeDispatchOption() {
                   switch ($scope.dispatch.dispatchingOptionSelected.id) {
                     case 0:
-                    $scope.dispatch.bottomPanelTitle = 'Móvil';
-                    $scope.dispatch.bottomPanelFirstTitle = 'Móvil';
+                    $scope.dispatch.bottomPanelTitle       = 'Móvil';
+                    $scope.dispatch.bottomPanelFirstTitle  = 'Móvil';
                     $scope.dispatch.bottomPanelSecondTitle = 'Estado';
-                    $scope.dispatch.bottomPanelThirdTitle = 'Tipo de Móvil';
+                    $scope.dispatch.bottomPanelThirdTitle  = 'Tipo de Móvil';
                     break;
                     case 1:
-                    $scope.dispatch.bottomPanelTitle = 'Empresa';
-                    $scope.dispatch.bottomPanelFirstTitle = 'Empresa';
+                    $scope.dispatch.bottomPanelTitle       = 'Empresa';
+                    $scope.dispatch.bottomPanelFirstTitle  = 'Empresa';
                     $scope.dispatch.bottomPanelSecondTitle = 'Nombre';
-                    $scope.dispatch.bottomPanelThirdTitle = 'Tipo de Cobertura';
+                    $scope.dispatch.bottomPanelThirdTitle  = 'Tipo de Cobertura';
                     break;
                   }
 
@@ -233,7 +234,7 @@
                   }
 
                   DispatchService
-                  .getDispatchPopupInformation(incident.id,$scope.dispatch.dispatchingOptionSelected.id)
+                  .getDispatchPopupInformation(incident.id,$scope.dispatch)
                   .then(function(response){
                     $scope.ctxDispatchGrid.gridOptions.data = UtilsService.toCamel(response.data.Sugerencias);
                   });
@@ -246,21 +247,28 @@
                 }
 
                 $scope.ok = function() {
-                  if (!$scope.ctxDispatchGrid.selectedRow) {
+                  if (!$scope.dispatch.selectedRow) {
                     toastr.error('Debe seleccionar al menos una sugerencia.');
                     return;
                   }
 
                   DispatchService
-                  .dispatch($scope.dispatch.incident, $scope.ctxDispatchGrid.selectedRow)
+                  .dispatch($scope.dispatch)
                   .then(function(response){
                     var data = UtilsService.toCamel(response.data);
+                    if (data.errorMessages) {
+                      toastr.error(data.errorMessages)
+                    } else {
+                      toastr.success("Se ha realizado el despacho correctamente");
+                      loadIncidents();
+                      loadMobiles();
+                      $modalInstance.close();
+                    }
                     $log.log(data);
                   }, function(error){
-                    $log.log(error);
+                      toastr.error(error)
                   });
 
-                  $modalInstance.close();
                 };
 
                 $scope.cancel = function() {

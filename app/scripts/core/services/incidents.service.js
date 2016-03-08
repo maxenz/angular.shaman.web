@@ -90,14 +90,13 @@
 
     function saveIncident(incident) {
 
-      $log.log(incident);
-
       return $http({
         method : 'POST',
         url : shamanConfiguration.url +
         'api/incidents/saveincident',
         data: $.param(incident)
       });
+
     }
 
     var service = {
