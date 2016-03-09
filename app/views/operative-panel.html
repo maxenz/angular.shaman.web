@@ -68,7 +68,7 @@
                   <p class="input-group">
                     <input type="text" class="form-control datepicker" datepicker-popup="{{receptionCtrl.datepicker.format}}" ng-model="receptionCtrl.incService.incident.incDate" ng-disabled="true" is-open="receptionCtrl.datepicker.opened" datepicker-options="receptionCtrl.datepicker.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
                     <span class="input-group-btn">
-                      <button type="button" class="btn btn-default" ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-click="receptionCtrl.datepicker.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                      <button type="button" class="btn btn-default" ng-disabled="true" ng-click="receptionCtrl.datepicker.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                   </p>
                 </div>
@@ -238,13 +238,16 @@
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Plan</label>
-                  <select class="form-control"  ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-options="item as item.label for item in receptionCtrl.cliService.planOptions track by item.id" ng-model="receptionCtrl.incService.incident.planSelected"></select>
+                  <select class="form-control" id="receptionCtrl.selPlanOptions"  ng-disabled="receptionCtrl.incService.incident.inputBlocked" ng-options="item as item.label for item in receptionCtrl.cliService.planOptions track by item.id" ng-model="receptionCtrl.incService.incident.planSelected"></select>
                 </div>
               </div>
               <div class="col-xs-2">
                 <div class="form-group">
                   <label for="#" class="control-label">Copago</label>
-                  <input class="form-control" ng-disabled="receptionCtrl.incService.incident.inputBlocked" type="text" placeholder="Copago" ng-model="receptionCtrl.incService.incident.copayment" />
+                  <div class="input-group">
+                    <span class="input-group-addon">$</span>
+                    <input class="form-control" ng-disabled="receptionCtrl.incService.incident.inputBlocked" type="text" placeholder="Copago" ng-model="receptionCtrl.incService.incident.copayment" />
+                  </div>
                 </div>
               </div>
 
@@ -269,23 +272,25 @@
               <div class="col-xs-4">
                 <div class="form-group">
                   <label for="#" class="control-label">Paciente derivado en</label>
-                  <input class="form-control" ng-disabled="receptionCtrl.incService.incident.inputBlocked" type="text" placeholder="Paciente derivado en" ng-model="receptionCtrl.incService.incident.patientDerivedIn" />
+                  <input class="form-control" ng-disabled="receptionCtrl.incService.incident.inputBlocked" type="text" placeholder="Paciente derivado en" ng-model="receptionCtrl.incService.incident.patientDerivative" />
                 </div>
               </div>
 
               <div class="col-xs-2">
                 <div class="form-group">
-                  <label for="#" class="control-label">Viaje</label>
-                  <input type="checkbox" ng-disabled="receptionCtrl.incService.incident.inputBlocked"  class="js-switch" ng-model="receptionCtrl.incService.incident.tripRealized" ui-switch="{color: '#7dcc93', secondaryColor: '#c5cbd1'}" />
+                  <label for="#" class="control-label" style="display:inherit">Viaje</label>
+                  <input class="form-control" type="checkbox" ng-disabled="receptionCtrl.incService.incident.inputBlocked"  class="js-switch" ng-model="receptionCtrl.incService.incident.tripRealized" ui-switch="{color: '#7dcc93', secondaryColor: '#c5cbd1'}" />
                 </div>
               </div>
 
             </div>
 
             <div class="row">
-              <div class="form-group">
-                <label for="#" class="control-label">Observaciones</label>
-                <textarea  class="form-control" ng-disabled="receptionCtrl.incService.incident.inputBlocked" placeholder="Observaciones..." rows="3" ng-model="receptionCtrl.incService.incident.observations"></textarea>
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label for="#" class="control-label">Observaciones</label>
+                  <textarea  class="form-control" ng-disabled="receptionCtrl.incService.incident.inputBlocked" placeholder="Observaciones..." rows="3" ng-model="receptionCtrl.incService.incident.observations"></textarea>
+                </div>
               </div>
             </div>
 
@@ -378,115 +383,115 @@
 <div class="panel-heading panel-heading-border" >
 <h2>Incidente</h2>
 </div>
-  <div class="panel-body">
-  <div class="row">
+<div class="panel-body">
+<div class="row">
 
-  <div class="col-xs-2">
-    <div class="form-group">
-      <label for="#" class="control-label">Fecha</label>
-      <p class="input-group">
-        <input type="text" class="form-control datepicker" ng-model="dispatch.incident.incDate" ng-disabled="true"  datepicker-options="dispatch.datepicker.dateOptions" date-disabled="disabled(date, mode)"  />
-      </p>
-    </div>
-  </div>
-
-    <div class="col-xs-1">
-  <div class="form-group">
-    <label for="#" class="control-label">Nro.</label>
-    <input class="form-control" type="text" ng-disabled="true" ng-model="dispatch.incident.number" />
-  </div>
+<div class="col-xs-2">
+<div class="form-group">
+<label for="#" class="control-label">Fecha</label>
+<p class="input-group">
+<input type="text" class="form-control datepicker" ng-model="dispatch.incident.incDate" ng-disabled="true"  datepicker-options="dispatch.datepicker.dateOptions" date-disabled="disabled(date, mode)"  />
+</p>
+</div>
 </div>
 
 <div class="col-xs-1">
-  <div class="form-group">
-    <label for="#" class="control-label">Gdo.</label>
-    <input class="form-control" type="text" ng-disabled="true" ng-model="dispatch.incident.grade" />
-  </div>
+<div class="form-group">
+<label for="#" class="control-label">Nro.</label>
+<input class="form-control" type="text" ng-disabled="true" ng-model="dispatch.incident.number" />
+</div>
+</div>
+
+<div class="col-xs-1">
+<div class="form-group">
+<label for="#" class="control-label">Gdo.</label>
+<input class="form-control" type="text" ng-disabled="true" ng-model="dispatch.incident.grade" />
+</div>
 </div>
 
 <div class="col-xs-3">
-  <div class="form-group">
-    <label for="#" class="control-label">Domicilio</label>
-    <input class="form-control" type="text" ng-disabled="true" ng-model="dispatch.incident.domicile" />
-  </div>
+<div class="form-group">
+<label for="#" class="control-label">Domicilio</label>
+<input class="form-control" type="text" ng-disabled="true" ng-model="dispatch.incident.domicile" />
+</div>
 </div>
 
 <div class="col-xs-1">
-  <div class="form-group">
-    <label for="#" class="control-label">Localidad</label>
-    <input class="form-control" type="text" ng-disabled="true" ng-model="dispatch.incident.locality" />
-  </div>
+<div class="form-group">
+<label for="#" class="control-label">Localidad</label>
+<input class="form-control" type="text" ng-disabled="true" ng-model="dispatch.incident.locality" />
+</div>
 </div>
 
 <div class="col-xs-2">
-  <div class="form-group">
-    <label for="#" class="control-label">Despachar...</label>
-    <select class="form-control"  ng-options="item as item.label for item in dispatch.dispatchingOptions track by item.id" ng-model="dispatch.dispatchingOptionSelected" ng-change="dispatch.changeDispatchOption()"></select>
-  </div>
+<div class="form-group">
+<label for="#" class="control-label">Despachar...</label>
+<select class="form-control"  ng-options="item as item.label for item in dispatch.dispatchingOptions track by item.id" ng-model="dispatch.dispatchingOptionSelected" ng-change="dispatch.changeDispatchOption()"></select>
+</div>
 </div>
 
 <div class="col-xs-1">
-  <div class="form-group">
-    <label for="#" class="control-label">Mov. A/Grado</label>
-    <input class="form-control" type="checkbox" icheck ng-model="dispatch.incident.movAptoGrado" />
-  </div>
+<div class="form-group">
+<label for="#" class="control-label">Mov. A/Grado</label>
+<input class="form-control" type="checkbox" icheck ng-model="dispatch.incident.movAptoGrado" />
+</div>
 </div>
 
 <div class="col-xs-1">
-  <div class="form-group">
-    <label for="#" class="control-label">Mov. de Zona</label>
-    <input class="form-control" type="checkbox" icheck ng-model="dispatch.incident.movZona" />
-  </div>
+<div class="form-group">
+<label for="#" class="control-label">Mov. de Zona</label>
+<input class="form-control" type="checkbox" icheck ng-model="dispatch.incident.movZona" />
+</div>
 </div>
 
-  </div>
-	</div>
-  </div>
+</div>
+</div>
+</div>
 
-  <div class="panel panel-success">
-    <div class="panel-heading panel-heading-border" >
-      <h2>Sugerencias para su operación</h2>
-    </div>
-    <div class="panel-body">
-      <div style="height:150px" ui-grid="ctxDispatchGrid.gridOptions" ui-grid-edit ui-grid-selection ui-grid-auto-resize></div>
-    </div>
+<div class="panel panel-success">
+<div class="panel-heading panel-heading-border" >
+<h2>Sugerencias para su operación</h2>
+</div>
+<div class="panel-body">
+<div style="height:150px" ui-grid="ctxDispatchGrid.gridOptions" ui-grid-edit ui-grid-selection ui-grid-auto-resize></div>
+</div>
 
-  </div>
+</div>
 
-  <div class="panel panel-success">
-    <div class="panel-heading panel-heading-border" >
-      <h2>{{ dispatch.bottomPanelTitle }}</h2>
-    </div>
-    <div class="panel-body">
-      <div class="row">
+<div class="panel panel-success">
+<div class="panel-heading panel-heading-border" >
+<h2>{{ dispatch.bottomPanelTitle }}</h2>
+</div>
+<div class="panel-body">
+<div class="row">
 
-      <div class="col-xs-2">
-        <div class="form-group">
-          <label for="#" class="control-label">{{ dispatch.bottomPanelFirstTitle}}</label>
-          <input class="form-control" type="text" ng-model="dispatch.bottomPanelFirstField" />
-        </div>
-      </div>
+<div class="col-xs-2">
+<div class="form-group">
+<label for="#" class="control-label">{{ dispatch.bottomPanelFirstTitle}}</label>
+<input class="form-control" type="text" ng-model="dispatch.bottomPanelFirstField" />
+</div>
+</div>
 
-      <div class="col-xs-3">
-        <div class="form-group">
-          <label for="#" class="control-label">{{ dispatch.bottomPanelSecondTitle}}</label>
-          <input class="form-control" type="text" ng-disabled="true" ng-model="dispatch.bottomPanelSecondField" />
-        </div>
-      </div>
+<div class="col-xs-3">
+<div class="form-group">
+<label for="#" class="control-label">{{ dispatch.bottomPanelSecondTitle}}</label>
+<input class="form-control" type="text" ng-disabled="true" ng-model="dispatch.bottomPanelSecondField" />
+</div>
+</div>
 
-      <div class="col-xs-4">
-        <div class="form-group">
-          <label for="#" class="control-label">{{ dispatch.bottomPanelThirdTitle }}</label>
-          <input class="form-control" type="text" ng-disabled="true" ng-model="dispatch.bottomPanelThirdField" />
-        </div>
-      </div>
+<div class="col-xs-4">
+<div class="form-group">
+<label for="#" class="control-label">{{ dispatch.bottomPanelThirdTitle }}</label>
+<input class="form-control" type="text" ng-disabled="true" ng-model="dispatch.bottomPanelThirdField" />
+</div>
+</div>
 
 
 
-      </div>
-    </div>
+</div>
+</div>
 
-  </div>
+</div>
 
 </div>
 

@@ -17,7 +17,8 @@
     '$modal',
     'DispatchService',
     'toastr',
-    '$interval'];
+    '$interval'
+  ];
 
     function dispatchController(
       $scope,
@@ -137,7 +138,7 @@
                   IncidentService.setIncident(UtilsService.toCamel(response.data));
                   MapService.setMarker(row.entity.dmLatitud, row.entity.dmLongitud);
                   vm.selectedIncident = row.entity;
-                  console.log(vm.selectedIncident);
+
                 })
               });
             }
@@ -175,7 +176,6 @@
             .then(function(response){
               vm.incidents = UtilsService.toCamel(response.data);
               vm.gridOptionsIncidents.data = vm.incidents;
-              console.log(vm.incidents);
               vm.data.incidentsAreLoading = false;
             }, function(error){
               vm.data.incidentsAreLoading = false;

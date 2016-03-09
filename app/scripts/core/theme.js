@@ -14,6 +14,7 @@ angular
     'toastr',
     'ngMessages',
     'ui.grid',
+    'blockUI',
     'ui.grid.edit',
     'ui.grid.selection',
     'ui.grid.autoResize',

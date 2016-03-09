@@ -7,8 +7,12 @@ angular
   'url': 'http://localhost/Shaman.Web/',
   'port': '80'
 })
-.config(['$provide', '$routeProvider', function($provide, $routeProvider) {
+.config(['$provide', '$routeProvider','blockUIConfig', function($provide, $routeProvider, blockUIConfig) {
   'use strict';
+
+  blockUIConfig.message = 'Aguarde un instante. Cargando...';
+  blockUIConfig.delay = 100;
+  blockUIConfig.autoBlock = false;
 
   $routeProvider
   .when('/', {
