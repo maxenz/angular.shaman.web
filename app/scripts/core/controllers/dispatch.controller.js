@@ -55,11 +55,11 @@
 
       vm.ctxMenuIncidents = [
         ['Preasignar', function ($itemScope) {
-          $log.log($itemScope);
+          vm.showDispatchModal(vm.selectedIncident);
         }],
         null, // Dividier
         ['Despachar', function ($itemScope) {
-          vm.showDispatchModal(vm.selectedIncident);
+          vm.showDispatchModal(vm.selectedIncident, true);
         }],
         null, // Dividier
         ['Establecer cierre', function ($itemScope) {
@@ -183,12 +183,13 @@
             })
           }
 
-          function showDispatchModal(incident) {
+          function showDispatchModal(incident, isDispatching) {
             $modal.open({
               templateUrl: 'dispatch-modal.html',
               controller: function($scope, $modalInstance) {
 
                 $scope.dispatch                           = {};
+                $scope.dispatch.title                     = isDispatching ? "Despacho de servicios" : "Preasignación de servicios";
                 $scope.dispatch.incident                  = {};
                 $scope.dispatch.incident.id               = incident.incidenteId;
                 $scope.dispatch.incident.travelIncidentId = incident.id;
@@ -295,7 +296,7 @@
                     if (data.errorMessages) {
                       toastr.error(data.errorMessages)
                     } else {
-                      toastr.success("Se ha realizado el despacho correctamente");
+                      toastr.success("La acción se realizó correctamente.");
                       loadIncidents();
                       loadMobiles();
                       $modalInstance.close();

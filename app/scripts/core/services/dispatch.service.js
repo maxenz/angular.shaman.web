@@ -20,7 +20,10 @@
       '&loc=' + loc);
     }
 
-    function dispatch(dispatchData) {
+    function dispatch(dispatchData, isDispatching) {
+
+      // --> Para optimizar tiempo ahora, uso lo mismo para Despachar
+      // --> y preasignar, con esta flag veo que estoy haciendo.
 
       var travelIncidentVm = {
         id           : dispatchData.incident.travelIncidentId,
@@ -34,12 +37,23 @@
 
       };
 
-      return $http({
-        method : 'POST',
-        url : shamanConfiguration.url +
-        'api/travelincidents/dispatch',
-        data: $.param(travelIncidentVm)
-      });
+      if (isDispatching) {
+        return $http({
+          method : 'POST',
+          url : shamanConfiguration.url +
+          'api/travelincidents/dispatch',
+          data: $.param(travelIncidentVm)
+        });
+      } else {
+        return $http({
+          method : 'POST',
+          url : shamanConfiguration.url +
+          'api/travelincidents/preasign',
+          data: $.param(travelIncidentVm)
+        });
+      }
+
+
 
     }
 
