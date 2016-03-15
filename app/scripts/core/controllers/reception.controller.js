@@ -415,7 +415,9 @@
               $scope.modalClientsSearch.gridOptions =  {
                 data: 'modalClientsSearch.data',
                 columnDefs: [
-                  { displayName: 'Razón Social', field: 'razonSocial' }],
+                  { displayName: 'Código', field: 'abreviaturaId'},
+                  { displayName: 'Razón Social', field: 'razonSocial' }
+                  ],
                   enableRowSelection: true,
                   enableRowHeaderSelection: false,
                   multiSelect: false,

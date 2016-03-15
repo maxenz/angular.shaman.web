@@ -197,6 +197,7 @@
                 $scope.dispatch.incident.grade            = incident.grado;
                 $scope.dispatch.incident.domicile         = incident.domicilio;
                 $scope.dispatch.incident.locality         = incident.localidad;
+                console.log(incident);
                 $scope.dispatch.incident.incDate          = moment(incident.horLlamada.split(' ')[0], "DD/MM/YYYY")._i;
                 $scope.dispatch.dispatchingOptions = [
                   {id: 0, label: 'Móviles'},
@@ -290,7 +291,7 @@
                   }
 
                   DispatchService
-                  .dispatch($scope.dispatch)
+                  .dispatch($scope.dispatch, true)
                   .then(function(response){
                     var data = UtilsService.toCamel(response.data);
                     if (data.errorMessages) {
